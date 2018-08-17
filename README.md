@@ -6,14 +6,36 @@
 
 Interested in **managed hosting**? [Take a brief survey](https://docs.google.com/forms/d/e/1FAIpQLSdzsvlbmLm4hgkWXspXVW7hyCb4CNTItNaC7LdVpyM1r48EmQ/viewform) to help us know what to build!
 
-Phproject
+Building Intellect Issues Manager
 =========
 *A high-performance project management system in PHP*
 
 ### Installation
-Download and extract [the latest release](https://github.com/Alanaktion/phproject/releases/latest) a web accessible directory, go to the page in a browser, and fill in your database connection details.
+Git clone this repository in htdocs, go to phpmyadmin in a browser, and create new database buildingintellect-issues.
 
-Detailed requirements and installation instructions are available at [phproject.org](http://www.phproject.org/install.html).
+```cd BI-issues```
+
+```composer install```
+
+```sudo chmod -R 777 tmp```
+
+```sudo chmod 777 app/model/config.php```
+
+```sudo nano /opt/lampp/apache2/conf/httpd.conf```
+
+Add 'Listen 48503' line at the top of configuration, then save.
+
+```sudo nano /opt/lampp/etc/extra/httpd-vhosts.conf```
+
+Add the new configuration block below 48501 block:
+```
+<VirtualHost *:48503>
+    DocumentRoot "/opt/lampp/htdocs/BI-issues"
+    ServerName bi-issues.local
+</VirtualHost>
+```
+
+Visit the new virtualhost in the browser and complete setup process [phproject.org](http://www.phproject.org/install.html).
 
 ### Development
 Phproject uses [Composer](https://getcomposer.org/) for dependency management. After cloning the repository, run `composer install` to install the required packages.
