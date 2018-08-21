@@ -1,6 +1,11 @@
 <?php
 
 namespace Helper;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
 
 class Notification extends \Prefab
 {
@@ -77,6 +82,17 @@ class Notification extends \Prefab
     {
         $f3 = \Base::instance();
 
+        // Setup sparkpost with phpmailer
+        $mail = new PHPMailer;
+        $mail->SMTPDebug = 3;
+        $mail->isSMTP();
+        $mail->Host = 'smtp.sparkpostmail.com';
+        $mail->Port = 587;
+        $mail->SMTPSecure = 'tls';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'SMTP_Injection';
+        $mail->Password = '2a4374ec25e4b30fb9332800a7e835ec73c5a997';
+
         // Add basic headers
         $headers  = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'From: '. $f3->get("mail.from") . "\r\n";
@@ -96,24 +112,16 @@ class Notification extends \Prefab
             // Encode content
             $body = $this->quotePrintEncode($body);
             $text = $this->quotePrintEncode($text);
-
-            // Build final message
-            $msg = "--$hash\r\n";
-            $msg .= "Content-Type: text/plain; charset=utf-8\r\n";
-            $msg .= "Content-Transfer-Encoding: quoted-printable\r\n";
-            $msg .= "\r\n" . $text . "\r\n";
-            $msg .= "--$hash\r\n";
-            $msg .= "Content-Type: text/html; charset=utf-8\r\n";
-            $msg .= "Content-Transfer-Encoding: quoted-printable\r\n";
-            $msg .= "\r\n" . $body . "\r\n";
-            $msg .= "--$hash--\r\n";
-
-            $body = $msg;
         } else {
             $headers .= "Content-Type: text/html; charset=utf-8\r\n";
         }
 
-        return mail($to, $subject, $body, $headers);
+        // Send email through PHP mailer
+        $mail->setFrom('noreply@buildingintellect.com');
+        $mail->addAddress($to);
+        $mail->Subject = $subject;
+        $mail->Body = $text;
+        return $mail->send();
     }
 
     /**
