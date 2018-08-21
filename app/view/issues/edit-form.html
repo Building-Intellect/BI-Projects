@@ -17,19 +17,37 @@
         </false>
     </check>
     <div class="form-group">
-        <label class="col-md-2 control-label">{{ @dict.cols.title }}</label>
-        <div class="col-md-7">
-            <input type="text" class="form-control" name="name" value="{{ empty(@issue) ? '' : @issue.name | esc }}" autocomplete="off" required>
-        </div>
-        <label class="col-md-2 control-label label-sm">{{ @dict.cols.size_estimate }}</label>
-        <div class="col-md-1">
-            <input type="text" class="form-control" name="size_estimate" value="{{ @@issue.size_estimate }}" autocomplete="off">
+        <label class="col-md-2 control-label label-sm">{{ @dict.cols.title }}</label>
+        <div class="col-md-6">
+            <input type="text" class="form-control input-sm" name="name" value="{{ empty(@issue) ? '' : @issue.name | esc }}" autocomplete="off" required>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label label-sm">{{ @dict.cols.parent_id }}</label>
         <div class="col-md-6">
             <input class="form-control input-sm" type="text" name="parent_id" autocomplete="off" value="{{ @@issue.parent_id ?: @@parent.id }}">
+        </div>
+        <div class="pull-right" style="margin-right:25px;">
+            <check if="{{ !empty(@issue) }}">
+                <a href="{{ @BASE }}/issues/{{ @issue.id }}" class="btn btn-default btn-sm btn-cancel">{{ @dict.cancel }}</a>
+                <button type="reset" class="btn btn-default btn-sm">{{ @dict.reset }}</button>
+            </check>
+            <check if="{{ empty(@issue) }}">
+                <true>
+                    <button type="submit" class="btn btn-primary btn-sm">{{ @dict.create_n, isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) | format }}</button>
+                </true>
+                <false>
+                    <button type="submit" class="btn btn-primary btn-sm">{{ @dict.save_n, isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) | format }}</button>
+                </false>
+            </check>
+        </div>
+        <div class="pull-right" style="margin-right:25px;">
+            <div class="checkbox checkbox-container-inline">
+                <label>
+                    <input type="checkbox" name="notify" value="1" checked>
+                    {{ @dict.send_notifications }}
+                </label>
+            </div>
         </div>
     </div>
     <div class="form-group">
@@ -230,31 +248,4 @@
             {~ \Helper\Plugin::instance()->callHook('render.issue_edit.after_comments', @issue) ~}
         </check>
     </check>
-
-    <div class="row">
-        <div class="col-md-offset-2 col-md-10 clearfix">
-            <div class="pull-right" style="margin-left: 15px;">
-                <check if="{{ !empty(@issue) }}">
-                    <a href="{{ @BASE }}/issues/{{ @issue.id }}" class="btn btn-default btn-sm btn-cancel">{{ @dict.cancel }}</a>
-                    <button type="reset" class="btn btn-default btn-sm">{{ @dict.reset }}</button>
-                </check>
-                <check if="{{ empty(@issue) }}">
-                    <true>
-                        <button type="submit" class="btn btn-primary btn-sm">{{ @dict.create_n, isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) | format }}</button>
-                    </true>
-                    <false>
-                        <button type="submit" class="btn btn-primary btn-sm">{{ @dict.save_n, isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) | format }}</button>
-                    </false>
-                </check>
-            </div>
-            <div class="pull-right">
-                <div class="checkbox checkbox-container-inline">
-                    <label>
-                        <input type="checkbox" name="notify" value="1" checked>
-                        {{ @dict.send_notifications }}
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
 </form>
