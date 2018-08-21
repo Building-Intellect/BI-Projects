@@ -27,6 +27,12 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="col-md-2 control-label label-sm">{{ @dict.cols.parent_id }}</label>
+        <div class="col-md-6">
+            <input class="form-control input-sm" type="text" name="parent_id" autocomplete="off" value="{{ @@issue.parent_id ?: @@parent.id }}">
+        </div>
+    </div>
+    <div class="form-group">
         <label class="col-md-2 control-label label-sm">{{ @dict.cols.description }}</label>
         <div class="col-md-10">
             <textarea class="form-control input-sm" name="description" rows="7">{{ empty(@issue) ? "" : @issue.description | esc }}</textarea>
@@ -181,27 +187,6 @@
                 <input type="checkbox" name="due_date_sprint" value="1" {~ if(@@issue.due_date_sprint) echo 'checked' ~}>
                 {{ @dict.set_sprint_from_due_date }}
             </label>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label label-sm">{{ @dict.cols.repeat_cycle }}</label>
-        <div class="col-md-6">
-            <select class="form-control input-sm" name="repeat_cycle">
-                <option value="">{{ @dict.not_repeating }}</option>
-                <option value="daily" {{ !empty(@issue) && @issue.repeat_cycle == 'daily' ? "selected" : "" }}>{{ @dict.daily }}</option>
-                <option value="weekly" {{ !empty(@issue) && @issue.repeat_cycle == 'weekly' ? "selected" : "" }}>{{ @dict.weekly }}</option>
-                <option value="monthly" {{ !empty(@issue) && @issue.repeat_cycle == 'monthly' ? "selected" : "" }}>{{ @dict.monthly }}</option>
-                <option value="quarterly" {{ !empty(@issue) && @issue.repeat_cycle == 'quarterly' ? "selected" : "" }}>{{ @dict.quarterly }}</option>
-                <option value="semi_annually" {{ !empty(@issue) && @issue.repeat_cycle == 'semi_annually' ? "selected" : "" }}>{{ @dict.semi_annually }}</option>
-                <option value="annually" {{ !empty(@issue) && @issue.repeat_cycle == 'annually' ? "selected" : "" }}>{{ @dict.annually }}</option>
-                <option value="sprint" {{ !empty(@issue) && @issue.repeat_cycle == 'sprint' ? "selected" : "" }}>{{ @dict.sprint }}</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label label-sm">{{ @dict.cols.parent_id }}</label>
-        <div class="col-md-6">
-            <input class="form-control input-sm" type="text" name="parent_id" autocomplete="off" value="{{ @@issue.parent_id ?: @@parent.id }}">
         </div>
     </div>
     <div class="form-group">

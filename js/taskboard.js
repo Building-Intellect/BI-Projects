@@ -124,8 +124,7 @@ var Taskboard = {
 			description = $(data).find('.description').text().trim(),
 			hours = $(data).find('.hours').text().trim(),
 			date = $(data).find('.dueDate').text().trim(),
-			priority = $(data).find('.priority').data('val'),
-			repeatCycle = $(data).find('.repeat_cycle').text();
+			priority = $(data).find('.priority').data('val');
 
 		$('#task-dialog input#taskId').val(taskId);
 		$('#task-dialog input#title').val(title);
@@ -133,7 +132,6 @@ var Taskboard = {
 		$('#task-dialog input#hours').val(hours);
 		$('#task-dialog input#hours_spent').val('');
 		$('#task-dialog input#comment').val('');
-		$('#task-dialog select#repeat_cycle').val(repeatCycle);
 		$('#task-dialog input#dueDate').val(date);
 		$('#task-dialog').find('#dueDate').datepicker({
 			format: 'mm/dd/yyyy',
@@ -194,7 +192,6 @@ var Taskboard = {
 	},
 	updateCard: function(card, data) {
 		$(card).find('.title').text(data.title);
-		$(card).find('.repeat_cycle').text(data.repeat_cycle);
 
 		if (isNumber(data.hours_spent) && parseInt(data.burndown) && data.hours > 0) {
 			$(card).find('.hours').text(parseFloat(data.hours) - parseFloat(data.hours_spent));
@@ -220,7 +217,6 @@ var Taskboard = {
 		var card = cell.find('.cloneable:last');
 
 		$(card).find('.title').text(data.title);
-		$(card).find('.repeat_cycle').text(data.repeat_cycle);
 
 		if (isNumber(data.hours) && data.hours > 0) {
 			$(card).find('.hours').text(parseFloat(data.hours));

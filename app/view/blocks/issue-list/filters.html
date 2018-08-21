@@ -132,51 +132,6 @@
             </check>
         </select>
     </td>
-    <td>
-        <select class="form-control input-sm" name="repeat_cycle">
-            <option value="">--</option>
-            <optgroup label="{{ @dict.general }}">
-                <check if="{{ !empty(@GET.repeat_cycle) && @GET.repeat_cycle == 'repeat' }}">
-                    <true><option value="repeat" selected>{{ @dict.repeating }}</option></true>
-                    <false><option value="repeat">{{ @dict.repeating }}</option></false>
-                </check>
-                <check if="{{ empty(@GET.repeat_cycle) }}">
-                    <true><option value="" selected>{{ @dict.not_repeating }}</option></true>
-                    <false><option value="">{{ @dict.not_repeating }}</option></false>
-                </check>
-            </optgroup>
-            <optgroup label="{{ @dict.exact_match }}">
-                <check if="{{ !empty(@GET.repeat_cycle) && @GET.repeat_cycle == 'daily' }}">
-                    <true><option value="daily" selected>{{ @dict.daily }}</option></true>
-                    <false><option value="daily">{{ @dict.daily }}</option></false>
-                </check>
-                <check if="{{ !empty(@GET.repeat_cycle) && @GET.repeat_cycle == 'weekly' }}">
-                    <true><option value="weekly" selected>{{ @dict.weekly }}</option></true>
-                    <false><option value="weekly">{{ @dict.weekly }}</option></false>
-                </check>
-                <check if="{{ !empty(@GET.repeat_cycle) && @GET.repeat_cycle == 'monthly' }}">
-                    <true><option value="monthly" selected>{{ @dict.monthly }}</option></true>
-                    <false><option value="monthly">{{ @dict.monthly }}</option></false>
-                </check>
-                <check if="{{ !empty(@GET.repeat_cycle) && @GET.repeat_cycle == 'quarterly' }}">
-                    <true><option value="quarterly" selected>{{ @dict.quarterly }}</option></true>
-                    <false><option value="quarterly">{{ @dict.quarterly }}</option></false>
-                </check>
-                <check if="{{ !empty(@GET.repeat_cycle) && @GET.repeat_cycle == 'semi_annually' }}">
-                    <true><option value="semi_annually" selected>{{ @dict.semi_annually }}</option></true>
-                    <false><option value="semi_annually">{{ @dict.semi_annually }}</option></false>
-                </check>
-                <check if="{{ !empty(@GET.repeat_cycle) && @GET.repeat_cycle == 'annually' }}">
-                    <true><option value="annually" selected>{{ @dict.annually }}</option></true>
-                    <false><option value="annually">{{ @dict.annually }}</option></false>
-                </check>
-                <check if="{{ !empty(@GET.repeat_cycle) && @GET.repeat_cycle == 'sprint' }}">
-                    <true><option value="sprint" selected>{{ @dict.sprint }}</option></true>
-                    <false><option value="sprint">{{ @dict.sprint }}</option></false>
-                </check>
-            </optgroup>
-        </select>
-    </td>
     <td></td>
     <check if="{{ !empty(@GET.status) && @GET.status != 'open' }}">
         <td></td>

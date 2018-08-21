@@ -13,13 +13,17 @@ Building Intellect Issues Manager
 ### Installation
 Git clone this repository in htdocs, go to phpmyadmin in a browser, and create new database buildingintellect-issues.
 
+```sudo chmod 777 BI-issues```
+
 ```cd BI-issues```
 
 ```composer install```
 
 ```sudo chmod -R 777 tmp```
 
-```sudo chmod 777 app/model/config.php```
+```sudo chmod -R 777 log```
+
+```sudo chmod -R 777 uploads```
 
 ```sudo nano /opt/lampp/apache2/conf/httpd.conf```
 
@@ -31,9 +35,13 @@ Add the new configuration block below 48501 block:
 ```
 <VirtualHost *:48503>
     DocumentRoot "/opt/lampp/htdocs/BI-issues"
-    ServerName bi-issues.local
+    ServerName buildingintellectissues.local
 </VirtualHost>
 ```
+
+```sudo nano /etc/hosts```
+
+Add new line '127.0.0.1 buildingintellectissues.local', then save.
 
 Visit the new virtualhost in the browser and complete setup process [phproject.org](http://www.phproject.org/install.html).
 

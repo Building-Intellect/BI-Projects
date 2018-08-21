@@ -279,21 +279,6 @@
                                     <input type="text" name="dueDate" id="dueDate" value="" class="dueDate form-control input-sm">
                                 </div>
                                 <div class="form-group">
-                                    <label for="repeat_cycle">{{ @dict.cols.repeat_cycle }}</label>
-                                    <div>
-                                        <select class="form-control input-sm" id="repeat_cycle" name="repeat_cycle">
-                                            <option value="">{{ @dict.not_repeating }}</option>
-                                            <option value="daily" {{ !empty(@issue) && @issue.repeat_cycle == 'daily' ? "selected" : "" }}>{{ @dict.daily }}</option>
-                                            <option value="weekly" {{ !empty(@issue) && @issue.repeat_cycle == 'weekly' ? "selected" : "" }}>{{ @dict.weekly }}</option>
-                                            <option value="monthly" {{ !empty(@issue) && @issue.repeat_cycle == 'monthly' ? "selected" : "" }}>{{ @dict.monthly }}</option>
-                                            <option value="quarterly" {{ !empty(@issue) && @issue.repeat_cycle == 'quarterly' ? "selected" : "" }}>{{ @dict.quarterly }}</option>
-                                            <option value="semi_annually" {{ !empty(@issue) && @issue.repeat_cycle == 'semi_annually' ? "selected" : "" }}>{{ @dict.semi_annually }}</option>
-                                            <option value="annually" {{ !empty(@issue) && @issue.repeat_cycle == 'annually' ? "selected" : "" }}>{{ @dict.annually }}</option>
-                                            <option value="sprint" {{ !empty(@issue) && @issue.repeat_cycle == 'sprint' ? "selected" : "" }}>{{ @dict.sprint }}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label for="priority">{{ @dict.cols.priority }}</label>
                                     <select id="priority" name="priority" class="form-control input-sm" onchange="Taskboard.changeModalPriority($(this).find('option:selected').val())">
                                         <repeat group="{{ @priorities }}" value="{{ @priority }}">
