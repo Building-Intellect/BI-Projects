@@ -78,7 +78,7 @@ class Notification extends \Prefab
      * @param  string $text     The plaintext body part (optional)
      * @return bool
      */
-    public function utf8mail($to, $subject, $body, $text = null)
+    public function utf8mail($to, $subject, $text = null)
     {
         $f3 = \Base::instance();
 
@@ -103,14 +103,9 @@ class Notification extends \Prefab
             $hash = md5(date("r"));
             $headers .= "Content-Type: multipart/alternative; boundary=\"$hash\"\r\n";
 
-            // Normalize line endings
-            $body = str_replace("\r\n", "\n", $body);
-            $body = str_replace("\n", "\r\n", $body);
+            // Encode content and fix new lines
             $text = str_replace("\r\n", "\n", $text);
             $text = str_replace("\n", "\r\n", $text);
-
-            // Encode content
-            $body = $this->quotePrintEncode($body);
             $text = $this->quotePrintEncode($text);
         } else {
             $headers .= "Content-Type: text/html; charset=utf-8\r\n";
@@ -157,13 +152,12 @@ class Notification extends \Prefab
             $f3->set("comment", $comment);
             $f3->set("previewText", $comment->text);
             $text = $this->_render("notification/comment.txt");
-            $body = $this->_render("notification/comment.html");
 
             $subject = "[#{$issue->id}] - New comment on {$issue->name}";
 
             // Send to recipients
             foreach ($recipients as $recipient) {
-                $this->utf8mail($recipient, $subject, $body, $text);
+                $this->utf8mail($recipient, $subject, $text);
                 $log->write("Sent comment notification to: " . $recipient);
             }
         }
@@ -210,7 +204,6 @@ class Notification extends \Prefab
             $f3->set("issue", $issue);
             $f3->set("update", $update);
             $text = $this->_render("notification/update.txt");
-            $body = $this->_render("notification/update.html");
 
             $changes->load(array("issue_update_id = ? AND `field` = 'closed_date' AND old_value = '' and new_value != ''", $update->id));
             if ($changes && $changes->id) {
@@ -221,7 +214,7 @@ class Notification extends \Prefab
 
             // Send to recipients
             foreach ($recipients as $recipient) {
-                $this->utf8mail($recipient, $subject, $body, $text);
+                $this->utf8mail($recipient, $subject, $text);
                 $log->write("Sent update notification to: " . $recipient);
             }
         }
@@ -258,17 +251,15 @@ class Notification extends \Prefab
                 $recipients = array_diff($recipients, array($user->email));
             }
 
-            // Render message body
+            // Render message text
             $f3->set("issue", $issue);
-
             $text = $this->_render("notification/new.txt");
-            $body = $this->_render("notification/new.html");
 
             $subject = "[#{$issue->id}] - {$issue->name} created by {$issue->author_name}";
 
             // Send to recipients
             foreach ($recipients as $recipient) {
-                $this->utf8mail($recipient, $subject, $body, $text);
+                $this->utf8mail($recipient, $subject, $text);
                 $log->write("Sent create notification to: " . $recipient);
             }
         }
@@ -312,13 +303,12 @@ class Notification extends \Prefab
             $f3->set("file", $file);
             $f3->set("previewText", $file->filename);
             $text = $this->_render("notification/file.txt");
-            $body = $this->_render("notification/file.html");
 
             $subject =  "[#{$issue->id}] - {$file->user_name} attached a file to {$issue->name}";
 
             // Send to recipients
             foreach ($recipients as $recipient) {
-                $this->utf8mail($recipient, $subject, $body, $text);
+                $this->utf8mail($recipient, $subject, $text);
                 $log->write("Sent file notification to: " . $recipient);
             }
         }
@@ -343,11 +333,10 @@ class Notification extends \Prefab
             // Render message body
             $f3->set("token", $token);
             $text = $this->_render("notification/user_reset.txt");
-            $body = $this->_render("notification/user_reset.html");
 
             // Send email to user
             $subject = "Reset your password - " . $f3->get("site.name");
-            $this->utf8mail($user->email, $subject, $body, $text);
+            $this->utf8mail($user->email, $subject, $text);
         }
     }
 
@@ -371,8 +360,7 @@ class Notification extends \Prefab
             $f3->set("previewText", $preview);
             $subject = "Due Today - " . $f3->get("site.name");
             $text = $this->_render("notification/user_due_issues.txt");
-            $body = $this->_render("notification/user_due_issues.html");
-            return $this->utf8mail($user->email, $subject, $body, $text);
+            return $this->utf8mail($user->email, $subject, $text);
         }
         return false;
     }

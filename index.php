@@ -17,7 +17,7 @@ $f3->mset(array(
     "PACKAGE" => "Phproject",
     "TZ" => "UTC",
     "microtime" => microtime(true),
-    "site.url" => $f3->get("SCHEME") . "://" . $f3->get("HOST") . $f3->get("BASE") . "/"
+    "site.url" => $f3->get("SCHEME") . "://" . $f3->get("HOST") . ":" . $f3->get("PORT") . "/"
 ));
 
 // Load configuration
