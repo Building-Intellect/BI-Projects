@@ -4,18 +4,16 @@
 [![Build Status](https://api.travis-ci.org/Alanaktion/phproject.svg)](https://travis-ci.org/Alanaktion/phproject)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/phproject/localized.png)](https://crowdin.com/project/phproject)
 
-Interested in **managed hosting**? [Take a brief survey](https://docs.google.com/forms/d/e/1FAIpQLSdzsvlbmLm4hgkWXspXVW7hyCb4CNTItNaC7LdVpyM1r48EmQ/viewform) to help us know what to build!
-
-Building Intellect Issues Manager
+Building Intellect Projects and Issues Manager
 =========
 *A high-performance project management system in PHP*
 
 ### Installation
-Git clone this repository in htdocs, go to phpmyadmin in a browser, and create new database buildingintellect-issues.
+Git clone this repository in htdocs, go to phpmyadmin in a browser, and create new database buildingintellect-projects.
 
-```sudo chmod 777 BI-issues```
+```sudo chmod 777 BI-projects```
 
-```cd BI-issues```
+```cd BI-projects```
 
 ```composer install```
 
@@ -31,22 +29,23 @@ Add 'Listen 48503' line at the top of configuration, then save.
 
 ```sudo nano /opt/lampp/etc/extra/httpd-vhosts.conf```
 
-Add the new configuration block below 48501 block:
+Add the new configuration block at the top:
 ```
 <VirtualHost *:48503>
-    DocumentRoot "/opt/lampp/htdocs/BI-issues"
-    ServerName buildingintellectissues.local
+    DocumentRoot "/opt/lampp/htdocs/BI-projects"
+    ServerName projects.buildingintellect.local
 </VirtualHost>
 ```
 
 ```sudo nano /etc/hosts```
 
-Add new line '127.0.0.1 buildingintellectissues.local', then save.
+Add new line '127.0.0.1 projects.buildingintellect.local', then save.
 
-Visit the new virtualhost in the browser and complete setup process [phproject.org](http://www.phproject.org/install.html).
+```sudo nano /opt/lampp/etc/php.ini```
 
-### Development
-Phproject uses [Composer](https://getcomposer.org/) for dependency management. After cloning the repository, run `composer install` to install the required packages.
+change the line 'track_errors=On' to 'track_errors=Off' because it is deprecated.
+
+Visit the new virtualhost 'http://projects.buildingintellect.local:48503' in the browser and complete setup process.
 
 ### Contributing
 Phproject is maintained as an open source project for use by anyone around the world under the [GNU General Public License](http://www.gnu.org/licenses/gpl-3.0.txt). If you find a bug or would like a new feature added, [open an issue](https://github.com/Alanaktion/phproject/issues/new) or [submit a pull request](https://github.com/Alanaktion/phproject/compare/) with new code. If you want to help with translation, [you can submit translations via Crowdin](https://crowdin.com/project/phproject).
