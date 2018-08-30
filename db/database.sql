@@ -47,6 +47,7 @@ CREATE TABLE `issue` (
 	`size_estimate` VARCHAR(20) NULL,
 	`description` text NOT NULL,
 	`parent_id` int(10) unsigned DEFAULT NULL,
+	`group_id` int(10) unsigned DEFAULT NULL,
 	`author_id` int(10) unsigned NOT NULL,
 	`owner_id` int(10) unsigned DEFAULT NULL,
 	`priority` int(10) NOT NULL DEFAULT '0',
@@ -67,8 +68,10 @@ CREATE TABLE `issue` (
 	KEY `due_date` (`due_date`),
 	KEY `type_id` (`type_id`),
 	KEY `parent_id` (`parent_id`),
+	KEY `group_id` (`group_id`),
 	CONSTRAINT `issue_type_id` FOREIGN KEY (`type_id`) REFERENCES `issue_type`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT,
 	CONSTRAINT `issue_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `issue`(`id`) ON UPDATE CASCADE ON DELETE SET NULL,
+	CONSTRAINT `issue_group_id` FOREIGN KEY (`group_id`) REFERENCES `user_group`(`group_id`) ON UPDATE CASCADE ON DELETE SET NULL,
 	CONSTRAINT `issue_sprint_id` FOREIGN KEY (`sprint_id`) REFERENCES `sprint`(`id`) ON UPDATE CASCADE ON DELETE SET NULL,
 	CONSTRAINT `issue_author_id` FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT,
 	CONSTRAINT `issue_owner_id` FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE SET NULL,
@@ -161,9 +164,9 @@ CREATE TABLE `issue_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `issue_type` (`id`, `name`, `role`) VALUES
-(1, 'Task', 'task'),
-(2, 'Project', 'project'),
-(3, 'Bug', 'bug');
+(1, 'Project', 'project'),
+(2, 'Issue', 'bug'),
+(3, 'Task', 'task');
 
 DROP TABLE IF EXISTS `issue_update`;
 CREATE TABLE `issue_update` (
@@ -251,6 +254,7 @@ SELECT
 	`issue`.`size_estimate` AS `size_estimate`,
 	`issue`.`description` AS `description`,
 	`issue`.`parent_id` AS `parent_id`,
+	`issue`.`group_id` AS `group_id`,
 	`issue`.`author_id` AS `author_id`,
 	`issue`.`owner_id` AS `owner_id`,
 	`issue`.`priority` AS `priority`,

@@ -4,5 +4,5 @@ return array (
   'db.port' => '3306',
   'db.user' => 'buildingintellect_site_admin',
   'db.pass' => '890p890p',
-  'db.name' => 'buildingintellect-issues',
+  'db.name' => 'buildingintellect-projects',
 );

@@ -694,6 +694,8 @@ class Issues extends \Controller
         if ($issue->owner_id) {
             $owner->load($issue->owner_id);
         }
+        $group = new \Model\User();
+        $group->load($issue->group_id);
 
         $files = new \Model\Issue\File\Detail;
         $f3->set("files", $files->find(array("issue_id = ? AND deleted_date IS NULL", $issue->id)));
@@ -713,6 +715,7 @@ class Issues extends \Controller
         $f3->set("type", $type);
         $f3->set("author", $author);
         $f3->set("owner", $owner);
+        $f3->set("group", $group);
 
         $comments = new \Model\Issue\Comment\Detail;
         $f3->set("comments", $comments->find(array("issue_id = ?", $issue->id), array("order" => "created_date DESC, id DESC")));

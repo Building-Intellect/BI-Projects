@@ -23,11 +23,26 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="col-md-2 control-label label-sm">{{ @dict.cols.group_id }}</label>
+        <div class="col-md-6">
+            <select class="form-control input-sm" name="group_id" required>
+                <optgroup label="{{ @dict.groups }}">
+                    <repeat group="{{ @groups }}" value="{{ @group }}">
+                        <check if="{{ !empty(@issue) && @issue.author_id == @group.id }}">
+                            <true><option value="{{ @group.id }}" selected>{{ @group.name | esc }}</option></true>
+                            <false><option value="{{ @group.id }}">{{ @group.name | esc }}</option></false>
+                        </check>
+                    </repeat>
+                </optgroup>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
         <label class="col-md-2 control-label label-sm">{{ @dict.cols.parent_id }}</label>
         <div class="col-md-6">
             <check if="{{ @dict[@type.name]=='Project' }}">
                 <input class="form-control input-sm" type="text" name="parent_id" autocomplete="off" value="{{ @@issue.parent_id ?: @@parent.id }}" disabled>
-                <false><input class="form-control input-sm" type="text" name="parent_id" autocomplete="off" value="{{ @@issue.parent_id ?: @@parent.id }}"></false>
+                <false><input class="form-control input-sm" type="text" name="parent_id" autocomplete="off" value="{{ @@issue.parent_id ?: @@parent.id }}" required></false>
             </check>
         </div>
         <div class="pull-right" style="margin-right:25px;">

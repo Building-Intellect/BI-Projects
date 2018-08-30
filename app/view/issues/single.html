@@ -129,6 +129,22 @@
                 </div>
             </check>
 
+            <b>{{ @dict.cols.group_id }}</b>
+            <div class="issue-head clearfix">
+                <img src="{{ @group->avatar(48) | esc }}" srcset="{{ @group->avatar(96) | esc }} 2x" class="profile-picture img-rounded" alt>
+                <p class="pull-left">
+                    <check if="{{ @group.username }}">
+                        <true>
+                            <a href="{{ @BASE }}/user/{{ @group.username }}">{{ @group.name | esc }}</a>
+                        </true>
+                        <false>
+                            {{ @group.name | esc }}
+                        </false>
+                    </check>
+                    <br><em>{{ @group.username }}</em>
+                </p>
+            </div>
+
             <dl class="dl-inline">
                 <check if="{{ @issue.sprint_id }}">
                     <dt>{{ @dict.cols.sprint }}</dt>
