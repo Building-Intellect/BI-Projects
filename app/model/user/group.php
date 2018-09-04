@@ -38,6 +38,29 @@ class Group extends \Model
     }
 
     /**
+     * Get complete project list for group
+     * @param int $group_id
+     * @return array
+     */
+    public static function getGroupProjects($group_id = null)
+    {
+        $f3 = \Base::instance();
+        $db = $f3->get("db.instance");
+
+        if ($user_id === null) {
+            //$user_id =  $f3->get("user.id");
+        }
+
+        $query_projects = "SELECT DISTINCT i.id, i.name, i.group_id
+            FROM issue i
+            JOIN user_group g ON i.group_id = g.group_id
+            WHERE g.group_id = :group AND i.type_id = 1 AND i.deleted_date IS NULL ORDER BY i.name";
+
+        $result = $db->exec($query_projects, array(":group" => $group_id));
+        return $result;
+    }
+
+    /**
      * Check if a user is in a group
      * @param int $group_id
      * @param int $user_id

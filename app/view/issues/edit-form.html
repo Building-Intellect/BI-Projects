@@ -41,10 +41,30 @@
         <label class="col-md-2 control-label label-sm">{{ @dict.cols.parent_id }}</label>
         <div class="col-md-6">
             <check if="{{ @dict[@type.name]=='Project' }}">
+                <select class="form-control input-sm" name="parent_id" disabled></select>
+                <false>
+                    <select class="form-control input-sm" name="parent_id">
+                        <optgroup label="{{ @dict.project }}">
+                            <repeat group="{{ @projects }}" value="{{ @project }}">
+                                <check if="{{ !empty(@issue) && @issue.owner_id == @project.id }}">
+                                    <true><option value="{{ @project.id }}" selected>{{ @project.name | esc }}</option></true>
+                                    <false><option value="{{ @project.id }}">{{ @project.name | esc }}</option></false>
+                                </check>
+                            </repeat>
+                        </optgroup>
+                    </select>
+                </false>
+            </check>
+        </div>
+    </div>
+    <div class="form-group"><!--
+        <label class="col-md-2 control-label label-sm">{{ @dict.cols.parent_id }}</label>
+        <div class="col-md-6">
+            <check if="{{ @dict[@type.name]=='Project' }}">
                 <input class="form-control input-sm" type="text" name="parent_id" autocomplete="off" value="{{ @@issue.parent_id ?: @@parent.id }}" disabled>
                 <false><input class="form-control input-sm" type="text" name="parent_id" autocomplete="off" value="{{ @@issue.parent_id ?: @@parent.id }}" required></false>
             </check>
-        </div>
+        </div>-->
         <div class="pull-right" style="margin-right:25px;">
             <check if="{{ !empty(@issue) }}">
                 <a href="{{ @BASE }}/issues/{{ @issue.id }}" class="btn btn-default btn-sm btn-cancel">{{ @dict.cancel }}</a>
