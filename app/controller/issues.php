@@ -391,13 +391,14 @@ class Issues extends \Controller
             $groupUsers;
             $groupProjects;
             foreach($userGroups as $curGroup) {
-                $f3->set("projects", $groups->getGroupProjects($curGroup['id']));
+                $groupProjects[] = $groups->getGroupProjects($curGroup['id']);
                 foreach($allUsers as $curUser) {
                     if ($groups->userIsInGroup($curGroup['id'], $curUser['id'])) {
                         $groupUsers[] = $curUser;
                     }
                 }
             }
+			$f3->set("projects", $groupProjects);
             $f3->set("users", $groupUsers);
         }
 
@@ -491,9 +492,32 @@ class Issues extends \Controller
         $sprint = new \Model\Sprint;
         $f3->set("sprints", $sprint->find(array("end_date >= ? OR id = ?", $this->now(false), $issue->sprint_id), array("order" => "start_date ASC, id ASC")));
 
+        // Load full project, user, group lists if admin user, and load by group access otherwise
+        $user = $f3->get("user_obj");
         $users = new \Model\User;
-        $f3->set("users", $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC")));
-        $f3->set("groups", $users->find("deleted_date IS NULL AND role = 'group'", array("order" => "name ASC")));
+        $issues = new \Model\Issue;
+        if ($user->role == 'admin') {
+            $f3->set("users", $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC")));
+            $f3->set("groups", $users->find("deleted_date IS NULL AND role = 'group'", array("order" => "name ASC")));
+            $f3->set("projects", $issues->find("deleted_date IS NULL AND type_id = 1", array("order" => "name ASC")));
+        } else {
+            $groups = new \Model\User\Group;
+            $userGroups = $groups->getUserGroups($f3->get("user.id"));
+            $f3->set("groups", $userGroups);
+            $allUsers = $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC"));
+            $groupUsers;
+            $groupProjects;
+            foreach($userGroups as $curGroup) {
+                $groupProjects[] = $groups->getGroupProjects($curGroup['id']);
+                foreach($allUsers as $curUser) {
+                    if ($groups->userIsInGroup($curGroup['id'], $curUser['id'])) {
+                        $groupUsers[] = $curUser;
+                    }
+                }
+            }
+			$f3->set("projects", $groupProjects);
+            $f3->set("users", $groupUsers);
+        }
     }
 
     /**
