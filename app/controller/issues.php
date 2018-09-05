@@ -389,9 +389,12 @@ class Issues extends \Controller
             $f3->set("groups", $userGroups);
             $allUsers = $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC"));
             $groupUsers;
-            $groupProjects;
+            $groupProjects = Array();
             foreach($userGroups as $curGroup) {
-                $groupProjects[] = $groups->getGroupProjects($curGroup['id']);
+                $curGroupProjects = $groups->getGroupProjects($curGroup['id']);
+                foreach($curGroupProjects as $project) {
+                    array_push($groupProjects, $project);
+                }
                 foreach($allUsers as $curUser) {
                     if ($groups->userIsInGroup($curGroup['id'], $curUser['id'])) {
                         $groupUsers[] = $curUser;
@@ -506,9 +509,12 @@ class Issues extends \Controller
             $f3->set("groups", $userGroups);
             $allUsers = $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC"));
             $groupUsers;
-            $groupProjects;
+            $groupProjects = Array();
             foreach($userGroups as $curGroup) {
-                $groupProjects[] = $groups->getGroupProjects($curGroup['id']);
+                $curGroupProjects = $groups->getGroupProjects($curGroup['id']);
+                foreach($curGroupProjects as $project) {
+                    array_push($groupProjects, $project);
+                }
                 foreach($allUsers as $curUser) {
                     if ($groups->userIsInGroup($curGroup['id'], $curUser['id'])) {
                         $groupUsers[] = $curUser;
