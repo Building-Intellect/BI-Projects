@@ -20,6 +20,10 @@ $f3->mset(array(
     "site.url" => $f3->get("SCHEME") . "://" . $f3->get("HOST") . ":" . $f3->get("PORT") . "/"
 ));
 
+// Initialize Cross-Origin Resource Sharing
+$domain = 'http://projects.buildingintellect.com';
+$f3->set('XFRAME', 'allow-from ' . $domain);
+
 // Load configuration
 if(is_file('config.php')) {
     $config = require_once('config.php');
