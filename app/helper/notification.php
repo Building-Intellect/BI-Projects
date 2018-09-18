@@ -84,7 +84,7 @@ class Notification extends \Prefab
 
         // Setup sparkpost with phpmailer
         $mail = new PHPMailer;
-        $mail->SMTPDebug = 3;
+        $mail->SMTPDebug = 0;
         $mail->isSMTP();
         $mail->Host = 'smtp.sparkpostmail.com';
         $mail->Port = 587;
@@ -93,22 +93,12 @@ class Notification extends \Prefab
         $mail->Username = 'SMTP_Injection';
         $mail->Password = '2a4374ec25e4b30fb9332800a7e835ec73c5a997';
 
-        // Add basic headers
-        $headers  = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'From: '. $f3->get("mail.from") . "\r\n";
-
         // Build multipart message if necessary
         if ($text) {
-            // Generate message breaking hash
-            $hash = md5(date("r"));
-            $headers .= "Content-Type: multipart/alternative; boundary=\"$hash\"\r\n";
-
             // Encode content and fix new lines
             $text = str_replace("\r\n", "\n", $text);
             $text = str_replace("\n", "\r\n", $text);
             $text = $this->quotePrintEncode($text);
-        } else {
-            $headers .= "Content-Type: text/html; charset=utf-8\r\n";
         }
 
         // Send email through PHP mailer

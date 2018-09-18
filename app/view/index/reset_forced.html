@@ -10,7 +10,7 @@
         <div class="col-sm-4 col-sm-offset-4">
             <form action="{{ @BASE }}/reset/forced" method="post" class="form-horizontal">
                 <fieldset>
-                    <legend>{{ @dict.reset_password }}</legend>
+                    <legend class="text-center">{{ @dict.reset_password }}</legend>
                     <check if="{{ !empty(@reset.error) }}">
                         <p class="alert alert-danger">{{ @reset.error }}</p>
                     </check>
