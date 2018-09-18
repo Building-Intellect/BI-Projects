@@ -9,7 +9,7 @@ require 'vendor/autoload.php';
 
 class Notification extends \Prefab
 {
-    const QPRINT_MAXL = 75;
+    const QPRINT_MAXL = 150;
 
     /**
      * Convert a 8 bit string to a quoted-printable string
