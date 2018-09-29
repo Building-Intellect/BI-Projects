@@ -56,6 +56,42 @@
                 </false>
             </check>
         </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label label-sm">{{ @dict.send_notifications }}</label>
+        <div class="col-md-6">
+            <div class="multiselect">
+                <div class="selectBox form-control input-sm" onclick="showNotifyCheckboxes()">
+                    <select>
+                        <option>Select Recipients</option>
+                    </select>
+                    <div class="overSelect"></div>
+                </div>
+                <div id="notify-checkboxes" name="notify">
+                    <check if="{{ @@issue.author_id }}">
+                        {~ @author = new \Model\User; @author->load(@issue.author_id); ~}
+                        <check if="{{ @author.deleted_date }}">
+                            <label for="authorCheck"><input type="checkbox" id="authorCheck" value="{{ @author.id }}" style="text-decoration: line-through;" checked/>{{ @author.name | esc}}</label>
+                        </check>
+                    </check>
+                    <label for="0"><input type="checkbox" id="0" value="{{ @dict.no_notifications }}" {{ empty(@issue) ? 'selected' : '' }}/>{{ @dict.no_notifications | esc}}</label>
+                    <label>{{ @dict.groups }}</label>
+                    <repeat group="{{ @groups }}" value="{{ @group }}">
+                        <check if="{{ !empty(@issue) && @issue.author_id == @group.id }}">
+                            <true><label for="{{ @group.id }}"><input type="checkbox" id="{{ @group.id }}" value="{{ @group.id }}" checked/>{{ @group.name | esc}}</label></true>
+                            <false><label for="{{ @group.id }}"><input type="checkbox" id="{{ @group.id }}" value="{{ @group.id }}"/>{{ @group.name | esc}}</label></false>
+                        </check>
+                    </repeat>
+                    <label>{{ @dict.users }}</label>
+                    <repeat group="{{ @users }}" value="{{ @item }}">
+                        <check if="{{ !empty(@issue) && @issue.owner_id == @item.id }}">
+                            <true><label for="{{ @item.id }}"><input type="checkbox" id="{{ @item.id }}" value="{{ @item.id }}" checked/>{{ @item.name | esc}}</label></true>
+                            <false><label for="{{ @item.id }}"><input type="checkbox" id="{{ @item.id }}" value="{{ @item.id }}"/>{{ @item.name | esc}}</label></false>
+                        </check>
+                    </repeat>
+                </div>
+            </div>
+        </div>
         <div class="pull-right" style="margin-right:25px;">
             <check if="{{ !empty(@issue) }}">
                 <a href="{{ @BASE }}/issues/{{ @issue.id }}" class="btn btn-default btn-sm btn-cancel">{{ @dict.cancel }}</a>
@@ -69,14 +105,6 @@
                     <button type="submit" class="btn btn-primary btn-sm">{{ @dict.save_n, isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) | format }}</button>
                 </false>
             </check>
-        </div>
-        <div class="pull-right" style="margin-right:25px;">
-            <div class="checkbox checkbox-container-inline">
-                <label>
-                    <input type="checkbox" name="notify" value="1" checked>
-                    {{ @dict.send_notifications }}
-                </label>
-            </div>
         </div>
     </div>
     <div class="form-group">

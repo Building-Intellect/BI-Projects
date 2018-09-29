@@ -86,12 +86,12 @@ class Notification extends \Prefab
         $mail = new PHPMailer;
         $mail->SMTPDebug = 0;
         $mail->isSMTP();
-        $mail->Host = 'smtp.sparkpostmail.com';
-        $mail->Port = 587;
-        $mail->SMTPSecure = 'tls';
+        $mail->Host = 'smtpout.secureserver.net';
+        $mail->Port = 465;
+        $mail->SMTPSecure = 'ssl';
         $mail->SMTPAuth = true;
-        $mail->Username = 'SMTP_Injection';
-        $mail->Password = '2a4374ec25e4b30fb9332800a7e835ec73c5a997';
+        $mail->Username = 'kellann@buildingintellect.com';
+        $mail->Password = '890p890p';
 
         // Build multipart message if necessary
         if ($text) {
