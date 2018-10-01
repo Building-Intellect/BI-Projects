@@ -38,7 +38,7 @@ class Issue extends \Model
      * @param  bool  $notify
      * @return Issue
      */
-    public static function create(array $data, $notify = true)
+    public static function create(array $data, array $notify = null)
     {
         // Normalize data
         if (isset($data["hours"])) {
@@ -65,9 +65,9 @@ class Issue extends \Model
         $item = parent::create($data);
 
         // Send creation notifications
-        if ($notify) {
+        if ($notify != null) {
             $notification = \Helper\Notification::instance();
-            $notification->issue_create($item->id);
+            $notification->issue_create($item->id, $notify);
         }
 
         // Return instance

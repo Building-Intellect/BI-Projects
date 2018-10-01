@@ -134,7 +134,7 @@ class Notification extends \Prefab
             }
 
             // Get recipient list and remove current user
-            $recipients = $this->_issue_watchers($issue_id);
+            $recipients = $this->_issue_watchers($issue_id, null);
             $recipients = array_diff($recipients, array($comment->user_email));
 
             // Render message body
@@ -187,7 +187,7 @@ class Notification extends \Prefab
             $f3->set("changes", $changes->find(array("issue_update_id = ?", $update->id)));
 
             // Get recipient list and remove update user
-            $recipients = $this->_issue_watchers($issue_id);
+            $recipients = $this->_issue_watchers($issue_id, null);
             $recipients = array_diff($recipients, array($update->user_email));
 
             // Render message body
@@ -214,7 +214,7 @@ class Notification extends \Prefab
      * Send an email to watchers detailing the updated fields
      * @param  int $issue_id
      */
-    public function issue_create($issue_id)
+    public function issue_create($issue_id, array $notify)
     {
         $f3 = \Base::instance();
         $log = new \Log("mail.log");
@@ -234,7 +234,7 @@ class Notification extends \Prefab
             }
 
             // Get recipient list, conditionally removing the author
-            $recipients = $this->_issue_watchers($issue_id);
+            $recipients = $this->_issue_watchers($issue_id, $notify);
             $user = new \Model\User;
             $user->load($issue->author_id);
             if ($user->option('disable_self_notifications')) {
@@ -285,7 +285,7 @@ class Notification extends \Prefab
             }
 
             // Get recipient list and remove current user
-            $recipients = $this->_issue_watchers($issue_id);
+            $recipients = $this->_issue_watchers($issue_id, null);
             $recipients = array_diff($recipients, array($file->user_email));
 
             // Render message body
@@ -360,7 +360,7 @@ class Notification extends \Prefab
      * @param  int $issue_id
      * @return array
      */
-    protected function _issue_watchers($issue_id)
+    protected function _issue_watchers($issue_id, array $notify = null)
     {
         $db = \Base::instance()->get("db.instance");
         $recipients = array();
@@ -370,14 +370,22 @@ class Notification extends \Prefab
         if (!empty($result[0]["email"])) {
             $recipients[] = $result[0]["email"];
         }
-
-
         $result = $db->exec("SELECT u.email FROM issue i INNER JOIN `user` u on i.owner_id = u.id WHERE u.deleted_date IS NULL AND i.id = ?", $issue_id);
         if (!empty($result[0]["email"])) {
             $recipients[] = $result[0]["email"];
         }
 
-        // Add whole group
+        // Add selected groups and users
+        if ($notify != null) {
+            foreach ($notify as $notify_user_id) {
+                $result = $db->exec("SELECT u.email FROM user u WHERE u.deleted_date IS NULL AND u.id = ?", $notify_user_id);
+                if (!empty($result[0]["email"])) {
+                    $recipients[] = $result[0]["email"];
+                }
+            }
+        }
+
+        /* add entire group
         $result = $db->exec("SELECT u.role, u.id FROM issue i INNER JOIN `user` u on i.owner_id = u.id  WHERE u.deleted_date IS NULL AND i.id = ?", $issue_id);
         if ($result && $result[0]["role"] == 'group') {
             $group_users = $db->exec("SELECT g.user_email FROM user_group_user g WHERE g.deleted_date IS NULL AND g.group_id = ?", $result[0]["id"]);
@@ -386,7 +394,7 @@ class Notification extends \Prefab
                     $recipients[] = $group_user["user_email"];
                 }
             }
-        }
+        }*/
 
         // Add watchers
         $watchers = $db->exec("SELECT u.email FROM issue_watcher w INNER JOIN `user` u ON w.user_id = u.id WHERE u.deleted_date IS NULL AND issue_id = ?", $issue_id);

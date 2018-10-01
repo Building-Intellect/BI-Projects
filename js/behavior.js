@@ -13,6 +13,7 @@
         var checkboxes = document.getElementById("notify-checkboxes");
         if (!expanded) {
             checkboxes.style.display = "block";
+			document.getElementById("recipients").style.borderColor = "#9ccfca";
             expanded = true;
         } else {
 			var inputs = checkboxes.getElementsByTagName('input');
@@ -24,6 +25,7 @@
 					document.getElementById("recipients").innerHTML += label.innerText + ", ";
 		        }
 		    }
+			document.getElementById("recipients").style.borderColor = "#dde2eb";
             checkboxes.style.display = "none";
             expanded = false;
         }

@@ -180,7 +180,7 @@ foreach ($emails as $msg_number) {
             'owner_id' => $owner,
             'status' => 1,
             'type_id' => 1
-        ));
+        ), null);
         $log->write(sprintf("Created issue #%s - %s", $issue->id, $issue->name));
     }
 

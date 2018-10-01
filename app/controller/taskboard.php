@@ -326,7 +326,7 @@ class Taskboard extends \Controller
         $post['owner_id'] = $post['assigned'];
         $post['due_date'] = $post['dueDate'];
         $post['parent_id'] = $post['storyId'];
-        $issue = \Model\Issue::create($post);
+        $issue = \Model\Issue::create($post, null);
         $this->_printJson($issue->cast() + array("taskId" => $issue->id));
     }
 

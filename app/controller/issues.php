@@ -405,16 +405,6 @@ class Issues extends \Controller
             $f3->set("users", $groupUsers);
         }
 
-        /* Just in case this is needed for limiting projects in form to selected group
-        if ($f3->get("PARAMS.parent")) {
-            $parent_id = $f3->get("PARAMS.parent");
-            $parent = new \Model\Issue;
-            $parent->load(array("id = ?", $parent_id));
-            if ($parent->id) {
-                $f3->set("parent", $parent);
-            }
-        }*/
-
         $status = new \Model\Issue\Status;
         $f3->set("statuses", $status->find(null, null, $f3->get("cache_expire.db")));
 
@@ -674,6 +664,8 @@ class Issues extends \Controller
 
         // Save issue, optionally send notifications
         $notify = !empty($post["notify"]);
+        // change notify to an array
+        // this save function is in issue model
         $issue->save($notify);
 
         return $issue;
@@ -693,7 +685,9 @@ class Issues extends \Controller
             $originalAuthor = $data['author_id'];
             $data['author_id'] = $this->_userId;
         }
-        $issue = \Model\Issue::create($data, !!$f3->get("POST.notify"));
+        // change notify to an array
+        // this save function is in issue model
+        $issue = \Model\Issue::create($data, $f3->get("POST.notify"));
         if ($originalAuthor) {
             $issue->author_id = $originalAuthor;
             $issue->save(false);
