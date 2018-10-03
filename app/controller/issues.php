@@ -288,8 +288,7 @@ class Issues extends \Controller
                         }
                     }
 
-                    $notify = !empty($post["notify"]);
-                    $issue->save($notify);
+                    $issue->save(null);
                 } else {
                     $f3->error(500, "Failed to update all the issues, starting with: $id.");
                     return;
@@ -562,7 +561,7 @@ class Issues extends \Controller
             $status->load(array("closed = ?", 0));
             $issue->status = $status->id;
             $issue->closed_date = null;
-            $issue->save();
+            $issue->save(null);
         }
 
         $f3->reroute("/issues/" . $issue->id);
@@ -603,18 +602,19 @@ class Issues extends \Controller
     protected function _saveUpdate()
     {
         $f3 = \Base::instance();
-        $post = array_map("trim", $f3->get("POST"));
+        //$post = array_map("trim", $f3->get("POST"));
+        $data = $f3->get("POST");
         $issue = new \Model\Issue;
 
         // Load issue and return if not set
-        $issue->load($post["id"]);
+        $issue->load($data["id"]);
         if (!$issue->id) {
             return $issue;
         }
 
         // Diff contents and save what's changed.
-        $hashState = json_decode($post["hash_state"]);
-        foreach ($post as $i => $val) {
+        $hashState = json_decode($data["hash_state"]);
+        foreach ($data as $i => $val) {
             if ($issue->exists($i)
                 && $i != "id"
                 && $issue->$i != $val
@@ -641,7 +641,7 @@ class Issues extends \Controller
 
                     // Save to the sprint of the due date unless one already set
                     if ($i=="due_date" && !empty($val)) {
-                        if (empty($post['sprint_id']) && !empty($post['due_date_sprint'])) {
+                        if (empty($data['sprint_id']) && !empty($data['due_date_sprint'])) {
                             $sprint = new \Model\Sprint;
                             $sprint->load(array("DATE(?) BETWEEN start_date AND end_date",$val));
                             $issue->sprint_id = $sprint->id;
@@ -652,20 +652,18 @@ class Issues extends \Controller
         }
 
         // Save comment if given
-        if (!empty($post["comment"])) {
+        if (!empty($data["comment"])) {
             $comment = new \Model\Issue\Comment;
             $comment->user_id = $this->_userId;
             $comment->issue_id = $issue->id;
-            $comment->text = $post["comment"];
+            $comment->text = $data["comment"];
             $comment->created_date = $this->now();
             $comment->save();
             $f3->set("update_comment", $comment);
         }
 
         // Save issue, optionally send notifications
-        $notify = !empty($post["notify"]);
-        // change notify to an array
-        // this save function is in issue model
+        $notify = $f3->get("POST.notify");
         $issue->save($notify);
 
         return $issue;
@@ -685,12 +683,11 @@ class Issues extends \Controller
             $originalAuthor = $data['author_id'];
             $data['author_id'] = $this->_userId;
         }
-        // change notify to an array
-        // this save function is in issue model
+        // change notify to an array to send emails to selected users
         $issue = \Model\Issue::create($data, $f3->get("POST.notify"));
         if ($originalAuthor) {
             $issue->author_id = $originalAuthor;
-            $issue->save(false);
+            $issue->save(null);
         }
         return $issue;
     }

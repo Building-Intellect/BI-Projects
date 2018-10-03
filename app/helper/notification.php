@@ -158,7 +158,7 @@ class Notification extends \Prefab
      * @param  int $issue_id
      * @param  int $update_id
      */
-    public function issue_update($issue_id, $update_id)
+    public function issue_update($issue_id, $update_id, array $notify)
     {
         $f3 = \Base::instance();
         if ($f3->get("mail.from")) {
@@ -186,8 +186,8 @@ class Notification extends \Prefab
             $changes = new \Model\Issue\Update\Field();
             $f3->set("changes", $changes->find(array("issue_update_id = ?", $update->id)));
 
-            // Get recipient list and remove update user
-            $recipients = $this->_issue_watchers($issue_id, null);
+            // Get recipient list and remove user doing the update
+            $recipients = $this->_issue_watchers($issue_id, $notify);
             $recipients = array_diff($recipients, array($update->user_email));
 
             // Render message body

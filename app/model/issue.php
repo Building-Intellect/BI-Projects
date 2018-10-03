@@ -335,10 +335,10 @@ class Issue extends \Model
 
     /**
      * Log issue update, send notifications
-     * @param  boolean $notify
+     * @param  array $notify
      * @return Issue
      */
-    public function save($notify = true)
+    public function save(array $notify = null)
     {
         $f3 = \Base::instance();
 
@@ -374,11 +374,11 @@ class Issue extends \Model
         // Check if updating or inserting
         if ($this->query) {
             // Save issue updates and send notifications
-            $update = $this->_saveUpdate($notify);
+            $update = $this->_saveUpdate($notify == null);
             $issue = parent::save();
             if ($notify && $update && $update->id && $update->notify) {
                 $notification = \Helper\Notification::instance();
-                $notification->issue_update($this->id, $update->id);
+                $notification->issue_update($this->id, $update->id, $notify);
             }
         } else {
             // Set closed date if status is closed
