@@ -374,9 +374,9 @@ class Issue extends \Model
         // Check if updating or inserting
         if ($this->query) {
             // Save issue updates and send notifications
-            $update = $this->_saveUpdate($notify == null);
+            $update = $this->_saveUpdate($notify != null);
             $issue = parent::save();
-            if ($notify && $update && $update->id && $update->notify) {
+            if ($notify != null && $update && $update->id && $update->notify) {
                 $notification = \Helper\Notification::instance();
                 $notification->issue_update($this->id, $update->id, $notify);
             }
