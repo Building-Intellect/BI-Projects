@@ -378,23 +378,19 @@ class Notification extends \Prefab
         // Add selected groups and users
         if ($notify != null) {
             foreach ($notify as $notify_user_id) {
-                $result = $db->exec("SELECT u.email FROM user u WHERE u.deleted_date IS NULL AND u.id = ?", $notify_user_id);
+                $result = $db->exec("SELECT u.email, u.role FROM user u WHERE u.deleted_date IS NULL AND u.id = ?", $notify_user_id);
                 if (!empty($result[0]["email"])) {
                     $recipients[] = $result[0]["email"];
+                } elseif ($result[0]["role"] == 'group') {
+                    $group_users = $db->exec("SELECT g.user_email FROM user_group_user g WHERE g.deleted_date IS NULL AND g.group_id = ?", $notify_user_id);
+                    foreach ($group_users as $group_user) {
+                        if (!empty($group_user["user_email"])) {
+                            $recipients[] = $group_user["user_email"];
+                        }
+                    }
                 }
             }
         }
-
-        /* add entire group
-        $result = $db->exec("SELECT u.role, u.id FROM issue i INNER JOIN `user` u on i.owner_id = u.id  WHERE u.deleted_date IS NULL AND i.id = ?", $issue_id);
-        if ($result && $result[0]["role"] == 'group') {
-            $group_users = $db->exec("SELECT g.user_email FROM user_group_user g WHERE g.deleted_date IS NULL AND g.group_id = ?", $result[0]["id"]);
-            foreach ($group_users as $group_user) {
-                if (!empty($group_user["user_email"])) {
-                    $recipients[] = $group_user["user_email"];
-                }
-            }
-        }*/
 
         // Add watchers
         $watchers = $db->exec("SELECT u.email FROM issue_watcher w INNER JOIN `user` u ON w.user_id = u.id WHERE u.deleted_date IS NULL AND issue_id = ?", $issue_id);
