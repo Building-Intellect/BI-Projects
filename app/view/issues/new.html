@@ -8,12 +8,24 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <h3>{{ @dict.new_n, @dict.issues | format }}</h3>
+            <h3>{{ @dict.new }}</h3>
             <div class="list-group">
                 <repeat group="{{ @issue_types }}" value="{{ @type }}">
-                    <a href="{{ @BASE }}/issues/new/{{ @type.id }}" class="list-group-item">
-                        <h4 class="list-group-item-heading">{{ @type.name | esc }}</h4>
-                    </a>
+                    <check if="{{ @dict[@type.name]=='Project' }}">
+                        <true>
+                            <check if="{{ @user.role=='admin' }}">
+                                <a href="{{ @BASE }}/issues/new/{{ @type.id }}" class="list-group-item">
+                                    <h4 class="list-group-item-heading">{{ @type.name | esc }}</h4>
+                                </a>
+                            </check>
+                        </true>
+                        <false>
+                            <a href="{{ @BASE }}/issues/new/{{ @type.id }}" class="list-group-item">
+                                <h4 class="list-group-item-heading">{{ @type.name | esc }}</h4>
+                            </a>
+                        </false>
+                    </check>
+
                 </repeat>
             </div>
         </div>

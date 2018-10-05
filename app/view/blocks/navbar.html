@@ -27,7 +27,16 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <repeat group="{{ @issue_types }}" value="{{ @type }}">
-                            <li><a href="{{ @BASE }}/issues/new/{{ @type.id }}">{{ isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) }}</a></li>
+                            <check if="{{ @dict[@type.name]=='Project' }}">
+                                <true>
+                                    <check if="{{ @user.role=='admin' }}">
+                                        <li><a href="{{ @BASE }}/issues/new/{{ @type.id }}">{{ isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) }}</a></li>
+                                    </check>
+                                </true>
+                                <false>
+                                    <li><a href="{{ @BASE }}/issues/new/{{ @type.id }}">{{ isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) }}</a></li>
+                                </false>
+                            </check>
                         </repeat>
                         <check if="{{ !empty(@issue) }}">
                             <li role="presentation" class="divider"></li>
@@ -72,7 +81,16 @@
                         <li role="presentation" class="divider"></li>
                         <li role="presentation" class="dropdown-header">{{ @dict.by_type }}</li>
                         <repeat group="{{ @issue_types }}" value="{{ @type }}">
-                            <li><a href="{{ @BASE }}/issues?type_id={{ @type.id }}&amp;status=open">{{ isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) }}</a></li>
+                            <check if="{{ @dict[@type.name]=='Project' }}">
+                                <true>
+                                    <check if="{{ @user.role=='admin' }}">
+                                        <li><a href="{{ @BASE }}/issues?type_id={{ @type.id }}&amp;status=open">{{ isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) }}</a></li>
+                                    </check>
+                                </true>
+                                <false>
+                                    <li><a href="{{ @BASE }}/issues?type_id={{ @type.id }}&amp;status=open">{{ isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) }}</a></li>
+                                </false>
+                            </check>
                         </repeat>
                         <li role="presentation" class="divider"></li>
                         <li><a href="{{ @BASE }}/tag">{{ @dict.issue_tags }}</a></li>

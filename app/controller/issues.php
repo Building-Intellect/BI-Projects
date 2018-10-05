@@ -363,7 +363,7 @@ class Issues extends \Controller
         if ($f3->get("PARAMS.type")) {
             $type_id = $f3->get("PARAMS.type");
         } else {
-            $type_id = 1;
+            $type_id = 2;
         }
 
         $type = new \Model\Issue\Type;
