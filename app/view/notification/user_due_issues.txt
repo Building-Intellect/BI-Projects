@@ -1,4 +1,4 @@
-{{ @site.name }}
+Building Intellect Projects
 
 <check if="{{ @due }}">
 Issues due today:

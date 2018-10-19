@@ -1,6 +1,7 @@
 --- ---
-{{ @site.name }}
-Issue #{{ @issue.id }} {{ @issue.name }} created
+Building Intellect Projects
+Issue Created: {{ @issue.name }} - ID#{{ @issue.id }}
+Project: {{ @parent.name }} - ID#{{ @parent.id }}
 
 Author: {{ @issue.author_name }}
 Assigned to: {{ @issue.owner_name }}

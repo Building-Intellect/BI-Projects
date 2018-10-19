@@ -1,8 +1,9 @@
 --- ---
-{{ @site.name }}
-New comment on #{{ @issue.id }} - {{ @issue.name }}
+Building Intellect Projects
+New Comment on Issue: {{ @issue.name }} - ID#{{ @issue.id }}
+Project: {{ @parent.name }} - ID#{{ @parent.id }}
 
-{{ @comment.user_name }}:
+Comment Author: {{ @comment.user_name }}:
 {{ @comment.text }}
 
 <check if="{{ @comment.file_id }}">

@@ -1,8 +1,9 @@
 --- ---
-{{ @site.name }}
-Issue #{{ @issue.id }} {{ @issue.name }} updated
+Building Intellect Projects
+Issue Updated: {{ @issue.name }} - ID#{{ @issue.id }}
+Project: {{ @parent.name }} - ID#{{ @parent.id }}
 
-{{ @update.user_name }}:
+Update Author: {{ @update.user_name }}
 
 {~
 	foreach(@changes as @change) {

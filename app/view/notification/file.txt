@@ -1,8 +1,9 @@
 --- ---
-{{ @site.name }}
-New file uploaded to #{{ @issue.id }} - {{ @issue.name }}:
+Building Intellect Projects
+File Uploaded to Issue: {{ @issue.name }} - ID#{{ @issue.id }}
+Project: {{ @parent.name }} - ID#{{ @parent.id }}
 
-{{ @file.user_name }}
+Uploaded by {{ @file.user_name }}
 
 {{ @file.filename }} - {{ @site.url }}files/{{ @file.id }}/{{ @file.filename }} ({{ \Helper\View::instance()->formatFilesize(@file.filesize) }})
 
