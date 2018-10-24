@@ -25,7 +25,13 @@ Git clone this repository in htdocs, go to phpmyadmin in a browser, and create n
 
 ```sudo nano /opt/lampp/apache2/conf/httpd.conf```
 
-Add 'Listen 48503' line at the top of configuration, then save.
+Add 'Listen 48503' line at the top of configuration.
+
+Add this new header configuration block under the Listens, then save:
+```
+Header unset X-Frame-Options
+Header append X-Frame-Options ALLOWALL
+```
 
 ```sudo nano /opt/lampp/etc/extra/httpd-vhosts.conf```
 
