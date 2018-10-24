@@ -1,5 +1,15 @@
 /* Building Intellect custom styles */
 
+.logo-nav {
+    width: 50px !important;
+    height: 50px !important;
+}
+
+.logo-login {
+    width: 200px !important;
+    height: 200px !important;
+}
+
 /* edit-form page styles */
 .selectBox select {
     width: 100%;

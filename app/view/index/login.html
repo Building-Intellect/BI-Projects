@@ -4,20 +4,11 @@
     <include href="blocks/head.html" />
 </head>
 <body class="login">
-
 <h1 class="h2 text-center">
     <a href="{{ @BASE }}/" class="nolink">
-        <check if="{{ empty(@site.logo) }}">
-            <true>{{ @site.name | esc }}</true>
-            <false>
-                <img src="{{ @site.logo }}" alt="{{ @site.name | esc }}">
-            </false>
-        </check>
+        <img class="logo-login" src="{{ @BASE }}/img/logo_square.png" />
     </a>
 </h1>
-
-<br><br>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-4 {{ @site.public_registration ? 'col-sm-offset-2' : 'col-sm-offset-4' }}">

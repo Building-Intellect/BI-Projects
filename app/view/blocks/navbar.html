@@ -9,12 +9,9 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="{{ @BASE }}/" accesskey="h">
-                <check if="{{ empty(@site.logo) }}">
-                    <true>{{ @site.name | esc }}</true>
-                    <false>
-                        <img src="{{ @site.logo }}" alt="{{ @site.name | esc }}">
-                    </false>
-                </check>
+                <a class="navbar-brand" href="{{ @BASE }}/">
+                    <img class="logo-nav" src="{{ @BASE }}/img/logo_square.png" />
+                </a>
             </a>
         </div>
 
