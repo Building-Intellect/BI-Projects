@@ -8,11 +8,6 @@
 <div class="container">
     <include href="blocks/admin/tabs.html" />
 
-    <p id="alert-release" class="alert alert-info clearfix hidden" aria-hidden="true">
-        <a href="https://github.com/Alanaktion/phproject/releases" target="_blank" class="btn btn-default btn-xs pull-right">{{ @dict.releases }}</a>
-        {{ @dict.release_available }}
-    </p>
-
     <div class="row">
         <div class="col-sm-4">
             <div class="well well-sm text-center">
@@ -34,6 +29,10 @@
         </div>
     </div>
 
+    <h1 class="text-center">{{ @dict.details }}</h1>
+    <br>
+    <hr>
+    <br>
     <div class="row">
         <div class="col-md-3 col-sm-6">
             <h4>{{ @dict.database }}</h4>
@@ -47,16 +46,16 @@
         <div class="col-md-3 col-sm-6">
             <div class="clearfix">
                 <h4 class="pull-left">{{ @dict.cache }}</h4>
-                <form class="pull-right" action="{{ @BASE }}/admin" method="post" style="margin-top: 10px;">
-                    <input type="hidden" name="action" value="clearcache">
-                    <button type="submit" class="btn btn-warning btn-xs">{{ @dict.clear_cache }}</button>
-                </form>
             </div>
             <p><b>{{ @dict.cache_mode }}:</b> {{ @CACHE }}</p>
             <small>{{ @dict.timeouts }}</small><br>
             <b>{{ @dict.queries }}:</b> {{ @cache_expire.db }}<br>
             <b>{{ @dict.minify }}:</b> {{ @cache_expire.minify }}<br>
             <b>{{ @dict.attachments }}:</b> {{ @cache_expire.attachments }}<br>
+            <form class="pull-left" action="{{ @BASE }}/admin" method="post" style="margin-top: 10px;">
+                <input type="hidden" name="action" value="clearcache">
+                <button type="submit" class="btn btn-warning btn-xs">{{ @dict.clear_cache }}</button>
+            </form>
         </div>
         <div class="col-md-3 col-sm-6">
             <h4>{{ @dict.outgoing_mail }}</h4>
