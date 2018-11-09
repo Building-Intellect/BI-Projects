@@ -168,13 +168,16 @@ class Issues extends \Controller
             $f3->set("title", $f3->get("dict.issues"));
         }
 
+        $f3->set("types", $type->find(null, null, $f3->get("cache_expire.db")));
+
         $status = new \Model\Issue\Status;
         $f3->set("statuses", $status->find(null, null, $f3->get("cache_expire.db")));
 
         $priority = new \Model\Issue\Priority;
         $f3->set("priorities", $priority->find(null, array("order" => "value DESC"), $f3->get("cache_expire.db")));
 
-        $f3->set("types", $type->find(null, null, $f3->get("cache_expire.db")));
+        $category = new \Model\Issue\Category;
+        $f3->set("categories", $category->find(null, null, $f3->get("cache_expire.db")));
 
         $sprint = new \Model\Sprint;
         $f3->set("sprints", $sprint->find(array("end_date >= ?", date("Y-m-d")), array("order" => "start_date ASC, id ASC")));
@@ -318,6 +321,7 @@ class Issues extends \Controller
             "id" => $f3->get("dict.cols.id"),
             "name" => $f3->get("dict.cols.title"),
             "type_name" => $f3->get("dict.cols.type"),
+            "category_name" => $f3->get("dict.cols.category"),
             "priority_name" => $f3->get("dict.cols.priority"),
             "status_name" => $f3->get("dict.cols.status"),
             "author_name" => $f3->get("dict.cols.author"),
@@ -410,6 +414,9 @@ class Issues extends \Controller
         $priority = new \Model\Issue\Priority;
         $f3->set("priorities", $priority->find(null, array("order" => "value DESC"), $f3->get("cache_expire.db")));
 
+        $category = new \Model\Issue\Category;
+        $f3->set("categories", $category->find(null, null, $f3->get("cache_expire.db")));
+
         $sprint = new \Model\Sprint;
         $f3->set("sprints", $sprint->find(array("end_date >= ?", $this->now(false)), array("order" => "start_date ASC, id ASC")));
         $f3->set("title", $f3->get("dict.new_n", $type->name));
@@ -475,11 +482,15 @@ class Issues extends \Controller
     protected function loadIssueMeta(\Model\Issue $issue)
     {
         $f3 = \Base::instance();
+
         $status = new \Model\Issue\Status;
         $f3->set("statuses", $status->find(null, null, $f3->get("cache_expire.db")));
 
         $priority = new \Model\Issue\Priority;
         $f3->set("priorities", $priority->find(null, array("order" => "value DESC"), $f3->get("cache_expire.db")));
+
+        $category = new \Model\Issue\Category;
+        $f3->set("categories", $category->find(null, null, $f3->get("cache_expire.db")));
 
         $sprint = new \Model\Sprint;
         $f3->set("sprints", $sprint->find(array("end_date >= ? OR id = ?", $this->now(false), $issue->sprint_id), array("order" => "start_date ASC, id ASC")));

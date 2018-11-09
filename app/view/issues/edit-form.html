@@ -121,6 +121,23 @@
         </div>
     </check>
     <div class="form-group">
+        <label class="col-md-2 control-label label-sm">{{ @dict.cols.category }}</label>
+        <div class="col-md-10">
+            <select class="form-control input-sm" name="priority">
+                <repeat group="{{ @categories }}" value="{{ @item }}">
+                    <check if="{{ empty(@issue) || !isset(@issue.category_id) }}">
+                        <true>
+                            <option value="{{ @item.id }}" {{ @item.name == @issue_category.default ? "selected" : '' }}>{{ isset(@dict[@item.name]) ? @dict[@item.name] : str_replace('_', ' ', @item.name) | esc }}</option>
+                        </true>
+                        <false>
+                            <option value="{{ @item.id }}" {{ @issue.category == @item.name ? "selected" : '' }}>{{ isset(@dict[@item.name]) ? @dict[@item.name] : str_replace('_', ' ', @item.name) | esc }}</option>
+                        </false>
+                    </check>
+                </repeat>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
         <label class="col-md-2 control-label label-sm">{{ @dict.cols.priority }}</label>
         <div class="col-md-10">
             <select class="form-control input-sm" name="priority">

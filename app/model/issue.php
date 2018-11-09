@@ -14,6 +14,7 @@ namespace Model;
  * @property int $author_id
  * @property int $owner_id
  * @property int $priority
+ * @property int $category_id
  * @property float $hours_total
  * @property float $hours_remaining
  * @property float $hours_spent
@@ -30,7 +31,7 @@ class Issue extends \Model
     protected $_table_name = "issue";
     protected $_heirarchy = null;
     protected $_children = null;
-    protected static $requiredFields = array("type_id", "status", "name", "author_id");
+    protected static $requiredFields = array("type_id", "status", "name", "category_id", "author_id");
 
     /**
      * Create and save a new issue

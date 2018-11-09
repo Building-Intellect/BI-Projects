@@ -50,6 +50,7 @@ CREATE TABLE `issue` (
 	`group_id` int(10) unsigned DEFAULT NULL,
 	`author_id` int(10) unsigned NOT NULL,
 	`owner_id` int(10) unsigned DEFAULT NULL,
+	`category_id` int(10) unsigned DEFAULT NULL,
 	`priority` int(10) NOT NULL DEFAULT '0',
 	`hours_total` double unsigned DEFAULT NULL,
 	`hours_remaining` double unsigned DEFAULT NULL,
@@ -69,6 +70,7 @@ CREATE TABLE `issue` (
 	KEY `type_id` (`type_id`),
 	KEY `parent_id` (`parent_id`),
 	KEY `group_id` (`group_id`),
+	KEY `category_id` (`category_id`),
 	CONSTRAINT `issue_type_id` FOREIGN KEY (`type_id`) REFERENCES `issue_type`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT,
 	CONSTRAINT `issue_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `issue`(`id`) ON UPDATE CASCADE ON DELETE SET NULL,
 	CONSTRAINT `issue_group_id` FOREIGN KEY (`group_id`) REFERENCES `user_group`(`group_id`) ON UPDATE CASCADE ON DELETE SET NULL,
@@ -76,6 +78,7 @@ CREATE TABLE `issue` (
 	CONSTRAINT `issue_author_id` FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT,
 	CONSTRAINT `issue_owner_id` FOREIGN KEY (`owner_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE SET NULL,
 	CONSTRAINT `issue_priority` FOREIGN KEY (`priority`) REFERENCES `issue_priority`(`value`) ON UPDATE CASCADE ON DELETE RESTRICT,
+	CONSTRAINT `issue_category` FOREIGN KEY (`category_id`) REFERENCES `issue_category`(`id`) ON UPDATE CASCADE ON DELETE SET NULL,
 	CONSTRAINT `issue_status` FOREIGN KEY (`status`) REFERENCES `issue_status`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -123,6 +126,20 @@ CREATE TABLE `issue_file` (
 	KEY `index_user_id` (`user_id`),
 	KEY `index_created_on` (`created_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `issue_category`;
+CREATE TABLE `issue_category` (
+	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+	`name` varchar(64) NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `issue_category` (`id`, `name`) VALUES
+(1, 'None'),
+(2, 'Hardware'),
+(3, 'Software'),
+(4, 'Both'),
+(5, 'Unknown');
 
 DROP TABLE IF EXISTS `issue_priority`;
 CREATE TABLE `issue_priority` (
@@ -274,6 +291,8 @@ SELECT
 	`sprint`.`start_date` AS `sprint_start_date`,
 	`sprint`.`end_date` AS `sprint_end_date`,
 	`type`.`name` AS `type_name`,
+	`category`.`id` AS `category_id`,
+	`category`.`name` AS `category_name`,
 	`status`.`name` AS `status_name`,
 	`status`.`closed` AS `status_closed`,
 	`priority`.`id` AS `priority_id`,
@@ -290,6 +309,7 @@ SELECT
 FROM `issue`
 LEFT JOIN `user` `author` on`issue`.`author_id` = `author`.`id`
 LEFT JOIN `user` `owner` on`issue`.`owner_id` = `owner`.`id`
+LEFT JOIN `issue_category` `category` on`issue`.`category_id` = `category`.`id`
 LEFT JOIN `issue_status` `status` on`issue`.`status` = `status`.`id`
 LEFT JOIN `issue_priority` `priority` on`issue`.`priority` = `priority`.`value`
 LEFT JOIN `issue_type` `type` on`issue`.`type_id` = `type`.`id`

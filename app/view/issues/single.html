@@ -157,6 +157,9 @@
                 <dt>{{ @dict.cols.type }}</dt>
                 <dd>{{ isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) | esc }}</dd>
 
+                <dt>{{ @dict.cols.category }}</dt>
+                <dd>{{ isset(@dict[@issue.category_name]) ? @dict[@issue.category_name] : str_replace('_', ' ', @issue.category_name) | esc }}</dd>
+
                 <dt>{{ @dict.cols.priority }}</dt>
                 <dd>{{ isset(@dict[@issue.priority_name]) ? @dict[@issue.priority_name] : str_replace('_', ' ', @issue.priority_name) | esc }}</dd>
 
