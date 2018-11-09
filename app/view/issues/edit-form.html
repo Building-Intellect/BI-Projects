@@ -123,7 +123,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label label-sm">{{ @dict.cols.category }}</label>
         <div class="col-md-10">
-            <select class="form-control input-sm" name="priority">
+            <select class="form-control input-sm" name="category_id">
                 <repeat group="{{ @categories }}" value="{{ @item }}">
                     <check if="{{ empty(@issue) || !isset(@issue.category_id) }}">
                         <true>
