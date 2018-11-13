@@ -130,7 +130,7 @@
                             <option value="{{ @item.id }}" {{ @item.name == @issue_category.default ? "selected" : '' }}>{{ isset(@dict[@item.name]) ? @dict[@item.name] : str_replace('_', ' ', @item.name) | esc }}</option>
                         </true>
                         <false>
-                            <option value="{{ @item.id }}" {{ @issue.category == @item.name ? "selected" : '' }}>{{ isset(@dict[@item.name]) ? @dict[@item.name] : str_replace('_', ' ', @item.name) | esc }}</option>
+                            <option value="{{ @item.id }}" {{ @issue.category_id == @item.id ? "selected" : '' }}>{{ isset(@dict[@item.name]) ? @dict[@item.name] : str_replace('_', ' ', @item.name) | esc }}</option>
                         </false>
                     </check>
                 </repeat>

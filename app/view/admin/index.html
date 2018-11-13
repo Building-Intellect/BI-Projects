@@ -96,26 +96,5 @@
 
     <include href="blocks/footer.html" />
 </div>
-<script>
-$(function() {
-    // Check for new releases
-    $.get(BASE + '/admin/releaseCheck', function(data) {
-        if (data.error) {
-            return console.error('Failed to check for a new release.');
-        }
-        if (data.update_available) {
-            $alert = $('#alert-release');
-            if (data.description_html) {
-                $description = $('<div />').css({
-                    'max-height': '200px',
-                    'overflow-y': 'auto'
-                }).html(data.description_html);
-                $alert.append('<hr>').append($description);
-            }
-            $alert.removeClass('hidden').removeAttr('aria-hidden');
-        }
-    }, 'json');
-});
-</script>
 </body>
 </html>
