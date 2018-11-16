@@ -86,8 +86,6 @@
                                 </false>
                             </check>
                         </repeat>
-                        <li role="presentation" class="divider"></li>
-                        <li><a href="{{ @BASE }}/tag">{{ @dict.issue_tags }}</a></li>
                         <repeat group="{{ @nav.browse }}" value="{{ @navitem }}">
                             <li class="{{ @navitem.active ? 'active' : '' }}"><a href="{{ @BASE }}/{{ @navitem.href }}">{{ @navitem.title }}</a></li>
                         </repeat>
