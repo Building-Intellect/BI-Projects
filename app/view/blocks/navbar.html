@@ -55,9 +55,6 @@
                         <check if="{{ @user.role == 'admin' || @nav.new }}">
                             <li role="presentation" class="divider"></li>
                         </check>
-                        <check if="{{ @user.role == 'admin' }}">
-                            <li><a href="{{ @BASE }}/admin/sprints/new">{{ @dict.sprint }}</a></li>
-                        </check>
                         <check if="{{ @nav.new }}">
                             <repeat group="{{ @nav.new }}" value="{{ @navitem }}">
                                 <li class="{{ @navitem.active ? 'active' : '' }}"><a href="{{ @BASE }}/{{ @navitem.href }}">{{ @navitem.title }}</a></li>
@@ -96,8 +93,8 @@
                         </repeat>
                     </ul>
                 </li>
-                <li class="{{ @menuitem == 'backlog' ? 'active':'' }}">
-                    <a href="{{ @BASE }}/backlog" accesskey="s">{{ @dict.sprints }}</a>
+                <li class="{{ @menuitem == 'tags' ? 'active':'' }}">
+                    <a href="{{ @BASE }}/tag">{{ @dict.issue_tags }}</a>
                 </li>
                 <repeat group="{{ @nav.root }}" value="{{ @navitem }}">
                     <li class="{{ @navitem.active ? 'active' : '' }}"><a href="{{ @BASE }}/{{ @navitem.href }}">{{ @navitem.title }}</a></li>

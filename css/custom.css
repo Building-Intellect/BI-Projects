@@ -3,6 +3,12 @@
 .logo-nav {
     width: 45px !important;
     height: 45px !important;
+    border-radius: 5px;
+}
+
+.logo-nav:hover {
+    box-shadow: 0px 0px 10px white;
+    transition-duration: .25s;
 }
 
 .logo-login {

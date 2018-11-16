@@ -24,6 +24,7 @@ class Tag extends \Controller
         $f3->set("cloud", $cloud);
 
         $f3->set("title", $f3->get("dict.issue_tags"));
+        $f3->set("menuitem", "tags");
         $this->_render("tag/index.html");
     }
 
