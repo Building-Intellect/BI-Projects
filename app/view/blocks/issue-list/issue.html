@@ -5,6 +5,7 @@
     <td><a href="{{ @BASE }}/issues/{{ @item.id }}" class="{{ @item.status_closed ? 'text-muted' : '' }}">{{ @item.id }}</a></td>
     <td><a href="{{ @BASE }}/issues/{{ @item.id }}" class="{{ @item.status_closed ? 'text-muted' : '' }}">{{ @item.name | esc }}</a></td>
     <td>{{ isset(@dict[@item.type_name]) ? @dict[@item.type_name] : str_replace('_', ' ', @item.type_name) }}</td>
+    <td>{{ isset(@dict[@item.category_name]) ? @dict[@item.category_name] : str_replace('_', ' ', @item.category_name) }}</td>
     <td>{{ isset(@dict[@item.priority_name]) ? @dict[@item.priority_name] : str_replace('_', ' ', @item.priority_name) }}</td>
     <td>{{ isset(@dict[@item.status_name]) ? @dict[@item.status_name] : str_replace('_', ' ', @item.status_name) }}</td>
     <td>{{ @item.parent_id ?: '' }}</td>
@@ -24,7 +25,6 @@
             <td>{{ @item.owner_name | esc }}</td>
         </false>
     </check>
-    <td>{{ !empty(@item.sprint_start_date) ? date("n/j/y", strtotime(@item.sprint_start_date)) : "" }}</td>
     <td title="{{ date('Y-m-d H:i:s', @this->utc2local(@item.created_date)) }}">{{ date("n/j/y", @this->utc2local(@item.created_date)) }}</td>
     <td>{{ !empty(@item.due_date) ? date("n/j/y", strtotime(@item.due_date)) : "" }}</td>
     <check if="{{ !empty(@GET.status) && @GET.status != 'open' }}">

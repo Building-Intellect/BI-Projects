@@ -21,6 +21,17 @@
         </select>
     </td>
     <td>
+        <select class="form-control input-sm" name="category_id">
+            <option value="">--</option>
+            <repeat group="{{ @categories }}" value="{{ @item }}">
+                <check if="{{ !empty(@GET.category_id) && @GET.category_id == @item.id }}">
+                    <true><option value="{{ @item.id }}" selected>{{ isset(@dict[@item.name]) ? @dict[@item.name] : str_replace('_', ' ', @item.name) }}</option></true>
+                    <false><option value="{{ @item.id }}">{{ isset(@dict[@item.name]) ? @dict[@item.name] : str_replace('_', ' ', @item.name) }}</option></false>
+                </check>
+            </repeat>
+        </select>
+    </td>
+    <td>
         <select class="form-control input-sm" name="priority_id">
             <option value="">--</option>
             <repeat group="{{ @priorities }}" value="{{ @item }}">
@@ -111,27 +122,7 @@
             </check>
         </select>
     </td>
-    <td>
-        <select class="form-control input-sm" name="sprint_id">
-            <option value="">--</option>
-            <repeat group="{{ @sprints }}" value="{{ @item }}">
-                <check if="{{ !empty(@GET.sprint_id) && @GET.sprint_id == @item.id }}">
-                    <true><option value="{{ @item.id }}" selected>{{ date("M j, Y", strtotime(@item.start_date)) }}</option></true>
-                    <false><option value="{{ @item.id }}">{{ date("M j, Y", strtotime(@item.start_date)) }}</option></false>
-                </check>
-            </repeat>
-            <check if="{{ !empty(@old_sprints) }}">
-                <optgroup label="{{ @dict.previous_sprints }}">
-                    <repeat group="{{ @old_sprints }}" value="{{ @item }}">
-                        <check if="{{ !empty(@GET.sprint_id) && @GET.sprint_id == @item.id }}">
-                            <true><option value="{{ @item.id }}" selected>{{ date("M j, Y", strtotime(@item.start_date)) }}</option></true>
-                            <false><option value="{{ @item.id }}">{{ date("M j, Y", strtotime(@item.start_date)) }}</option></false>
-                        </check>
-                    </repeat>
-                </optgroup>
-            </check>
-        </select>
-    </td>
+    
     <td></td>
     <check if="{{ !empty(@GET.status) && @GET.status != 'open' }}">
         <td></td>

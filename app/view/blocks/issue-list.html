@@ -1,4 +1,4 @@
-<set headings="{{ array('id', 'title', 'type', 'priority', 'status', 'parent_id', 'author', 'assignee', 'sprint', 'created', 'due') }}" />
+<set headings="{{ array('id', 'title', 'type', 'category', 'priority', 'status', 'parent_id', 'author', 'assignee', 'created', 'due') }}" />
 <set bulkUpdate="{{ isset(@statuses) && isset(@groups) && isset(@users) && isset(@priorities) && isset(@sprints) && isset(@issue_types) }}" />
 <check if="{{ !empty(@GET.status) && @GET.status != 'open' }}">
 {~ @headings[] = 'closed' ~}
