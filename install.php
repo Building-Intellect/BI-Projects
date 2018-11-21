@@ -96,7 +96,8 @@ if ($_POST) {
         \Model\Config::setVal('gravatar.rating', 'pg');
         \Model\Config::setVal('gravatar.default', 'mm');
         \Model\Config::setVal('mail.truncate_lines', '<--->,--- ---,------------------------------');
-        \Model\Config::setVal('files.maxsize', 2097152);
+        \Model\Config::setVal('files.maxsize', 500000000);
+        \Model\Config::setVal('site.timezone', 'US/Pacific');
 
         // Save configuration options
         if (!empty($post["language"])) {
@@ -113,7 +114,6 @@ if ($_POST) {
             \Model\Config::setVal("parse.textile", 0);
         }
         \Model\Config::setVal("site.name", $post['site-name']);
-        \Model\Config::setVal("site.timezone", $post['site-timezone']);
         \Model\Config::setVal("site.public_registration", $post['site-public_registration']);
         \Model\Config::setVal("mail.from", $post['mail-from']);
 
