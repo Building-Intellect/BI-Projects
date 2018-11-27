@@ -10,6 +10,7 @@ namespace Model;
  * @property int $type_id
  * @property string $name
  * @property string $description
+ * @property int $group_id
  * @property int $parent_id
  * @property int $author_id
  * @property int $owner_id
@@ -31,7 +32,7 @@ class Issue extends \Model
     protected $_table_name = "issue";
     protected $_heirarchy = null;
     protected $_children = null;
-    protected static $requiredFields = array("type_id", "status", "name", "category_id", "author_id");
+    protected static $requiredFields = array("type_id", "status", "name", "category_id", "group_id", "author_id");
 
     /**
      * Create and save a new issue
