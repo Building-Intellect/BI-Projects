@@ -82,7 +82,7 @@ class Notification extends \Prefab
     {
         $f3 = \Base::instance();
 
-        // Setup sparkpost with phpmailer
+        // Setup notifications through godaddy with phpmailer
         $mail = new PHPMailer;
         $mail->SMTPDebug = 0;
         $mail->isSMTP();
@@ -154,9 +154,10 @@ class Notification extends \Prefab
     }
 
     /**
-     * Send an email to watchers detailing the updated fields
+     * Send an email to watchers and selected detailing the updated fields
      * @param  int $issue_id
      * @param  int $update_id
+     * @param  array $notify
      */
     public function issue_update($issue_id, $update_id, array $notify)
     {
@@ -186,7 +187,7 @@ class Notification extends \Prefab
             $changes = new \Model\Issue\Update\Field();
             $f3->set("changes", $changes->find(array("issue_update_id = ?", $update->id)));
 
-            // Get recipient list and remove user doing the update
+            // Get recipient list and remove current user
             $recipients = $this->_issue_watchers($issue_id, $notify);
             $recipients = array_diff($recipients, array($update->user_email));
 
@@ -211,8 +212,9 @@ class Notification extends \Prefab
     }
 
     /**
-     * Send an email to watchers detailing the updated fields
+     * Send an email to watchers and selected users detailing the updated fields
      * @param  int $issue_id
+     * @param  array $notify
      */
     public function issue_create($issue_id, array $notify)
     {
@@ -251,6 +253,51 @@ class Notification extends \Prefab
             foreach ($recipients as $recipient) {
                 $this->utf8mail($recipient, $subject, $text);
                 $log->write("Sent create notification to: " . $recipient);
+            }
+        }
+    }
+
+    /**
+     * Send an email to watchers and selected users detailing the updated fields
+     * @param  int $issue_id
+     * @param  int $user_id
+     * @param  array $notify
+     */
+    public function issue_close($issue_id, $user_id)
+    {
+        $f3 = \Base::instance();
+        $log = new \Log("mail.log");
+        if ($f3->get("mail.from")) {
+            $log = new \Log("mail.log");
+
+            // Get issue and update data
+            $issue = new \Model\Issue\Detail();
+            $issue->load($issue_id);
+            $f3->set("issue", $issue);
+
+            // Get issue parent if set
+            if ($issue->parent_id) {
+                $parent = new \Model\Issue;
+                $parent->load($issue->parent_id);
+                $f3->set("parent", $parent);
+            }
+
+            // Get recipient list and user who closed
+            $recipients = $this->_issue_watchers($issue_id, null);
+            $user = new \Model\User;
+            $user->load($user_id);
+
+            // Render message text
+            $f3->set("issue", $issue);
+            $f3->set("user", $user);
+            $text = $this->_render("notification/close.txt");
+
+            $subject = "[#{$issue->id}] - {$issue->name} closed by {$user->name}";
+
+            // Send to recipients
+            foreach ($recipients as $recipient) {
+                $this->utf8mail($recipient, $subject, $text);
+                $log->write("Sent close notification to: " . $recipient);
             }
         }
     }
@@ -356,8 +403,9 @@ class Notification extends \Prefab
     }
 
     /**
-     * Get array of email addresses of all watchers on an issue
+     * Get array of email addresses of all watchers and selected users for issue
      * @param  int $issue_id
+     * @param  array $notify
      * @return array
      */
     protected function _issue_watchers($issue_id, array $notify = null)
@@ -365,7 +413,7 @@ class Notification extends \Prefab
         $db = \Base::instance()->get("db.instance");
         $recipients = array();
 
-        // Add issue author and owner
+        // Add issue author and assignee
         $result = $db->exec("SELECT u.email FROM issue i INNER JOIN `user` u on i.author_id = u.id WHERE u.deleted_date IS NULL AND i.id = ?", $issue_id);
         if (!empty($result[0]["email"])) {
             $recipients[] = $result[0]["email"];

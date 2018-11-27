@@ -541,10 +541,10 @@ class Issue extends \Model
     }
 
     /**
-     * Close the issue
+     * Close the issue and notify interested users
      * @return Issue $this
      */
-    public function close()
+    public function close($user_id)
     {
         if ($this->id && !$this->closed_date) {
             $status = new \Model\Issue\Status;
@@ -552,6 +552,10 @@ class Issue extends \Model
             $this->status = $status->id;
             $this->closed_date = date("Y-m-d H:i:s");
             $this->save();
+
+            // Always send close notifications
+            $notification = \Helper\Notification::instance();
+            $notification->issue_close($this->id, $user_id);
         }
         return $this;
     }

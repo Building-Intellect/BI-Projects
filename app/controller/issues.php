@@ -544,7 +544,7 @@ class Issues extends \Controller
             return;
         }
 
-        $issue->close();
+        $issue->close($this->_userId);
 
         $f3->reroute("/issues/" . $issue->id);
     }
@@ -1070,7 +1070,7 @@ class Issues extends \Controller
         }
 
         if ($f3->get("POST.action") == "close") {
-            $issue->close();
+            $issue->close($this->_userId);
         }
 
         $comment = \Model\Issue\Comment::create(array(
