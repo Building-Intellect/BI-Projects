@@ -138,7 +138,7 @@ class Issue extends \Model
         if ($recursive) {
             $this->_deleteTree();
         }
-        return $this->save(false);
+        return $this->save(null);
     }
 
     /**
@@ -165,7 +165,7 @@ class Issue extends \Model
         if ($recursive) {
             $this->_restoreTree();
         }
-        return $this->save(false);
+        return $this->save(null);
     }
 
     /**
