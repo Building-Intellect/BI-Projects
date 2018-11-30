@@ -89,9 +89,9 @@ if ($_POST) {
         \Model\Config::setVal('site.public_registration', 0);
         \Model\Config::setVal('security.block_ccs', 0);
         \Model\Config::setVal('security.min_pass_len', 6);
-        \Model\Config::setVal('issue_type.task', 1);
-        \Model\Config::setVal('issue_type.project', 2);
-        \Model\Config::setVal('issue_type.bug', 3);
+        \Model\Config::setVal('issue_type.project', 1);
+        \Model\Config::setVal('issue_type.bug', 2);
+        \Model\Config::setVal('issue_type.task', 3);
         \Model\Config::setVal('issue_priority.default', 0);
         \Model\Config::setVal('gravatar.rating', 'pg');
         \Model\Config::setVal('gravatar.default', 'mm');
