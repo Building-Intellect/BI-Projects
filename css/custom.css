@@ -39,3 +39,19 @@
 #notify-checkboxes label:hover {
     background-color: #1e90ff;
 }
+
+/* single issue page styles */
+.plans-viewer {
+    width: 85%;
+    height: 95%;
+}
+
+.plans-viewer-content {
+    height: 100%;
+}
+
+.plans-single {
+    width: 49%;
+    height: 34vh;
+    margin-right: 5px;
+}

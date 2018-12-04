@@ -92,7 +92,10 @@
     <div class="row">
         <div class="col-lg-5">
             <check if="{{ @issue.type_id == @issue_type.project }}">
-                <p><a href="{{ @BASE }}/issues/project/{{ @issue.id }}" class="btn btn-default btn-sm">{{ @dict.project_overview }}</a></p>
+                <p>
+                    <a href="{{ @BASE }}/issues/project/{{ @issue.id }}" class="btn btn-default btn-sm">{{ @dict.project_overview }}</a>
+                    <a class="btn btn-default btn-sm" data-toggle="modal" href="#" data-target="#project_plans">{{ @dict.project_plans }}</a>
+                </p>
             </check>
 
             <b>{{ @dict.cols.author }}</b>
@@ -366,6 +369,30 @@
         </div>
     </div>
 </form>
+
+<div class="modal fade in" id="project_plans" tabindex="-1">
+    <div class="modal-dialog plans-viewer">
+        <div class="modal-content plans-viewer-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{ @dict.close }}</span></button>
+                <h4 class="modal-title">{{ @dict.project_plans }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <iframe class="plans-single" id="plans-1" src="http://projects.buildingintellect.local:48503/pdfjs/web/viewer.html?file=/files/1/Mechanical.pdf#page=1"></iframe>
+                    <iframe class="plans-single" id="plans-2" src="http://projects.buildingintellect.local:48503/pdfjs/web/viewer.html?file=/files/1/Mechanical.pdf#page=2"></iframe>
+                </div>
+                <div class="row">
+                    <iframe class="plans-single" id="plans-3" src="http://projects.buildingintellect.local:48503/pdfjs/web/viewer.html?file=/files/1/Mechanical.pdf#page=3"></iframe>
+                    <iframe class="plans-single" id="plans-4" src="http://projects.buildingintellect.local:48503/pdfjs/web/viewer.html?file=/files/1/Mechanical.pdf#page=4"></iframe>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">{{ @dict.cancel }}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="modal-copy" tabindex="-1" role="dialog" aria-labelledby="modal-copy-label" aria-hidden="true">
     <div class="modal-dialog">
