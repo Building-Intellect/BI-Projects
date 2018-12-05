@@ -55,3 +55,17 @@
     height: 34vh;
     margin-right: 5px;
 }
+
+.plans-control {
+    margin-right: 10px;
+}
+
+.plans-label {
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-bottom: 10px;
+}
+
+.plans-footer {
+    text-align: center;
+}

@@ -375,19 +375,55 @@
         <div class="modal-content plans-viewer-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{ @dict.close }}</span></button>
-                <h4 class="modal-title">{{ @dict.project_plans }}</h4>
+                <h4 class="modal-title pull-left">{{ @dict.project_plans }}</h4>
+                <div class="pull-right">
+                    <select class=" plans-control" id="plans-documents">
+                        <option selected>Mechanical</option>
+                        <option selected>Architectural</option>
+                        <option selected>Landscape</option>
+                    </select>
+                    <select class="plans-control" id="plans-pages">
+                        <option selected>Page 1</option>
+                    </select>
+                    <button type="button" class="btn btn-default btn-xs plans-control" onclick="" id="plans-prev-4">
+                        <span class="fa fa-angle-double-left"></span> Previous 4
+                    </button>
+                    <button type="button" class="btn btn-default btn-xs plans-control" onclick="" id="plans-next-4">
+                        <span class="fa fa-angle-double-right"></span> Next 4
+                    </button>
+                </div>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <iframe class="plans-single" id="plans-1" src="http://projects.buildingintellect.local:48503/pdfjs/web/viewer.html?file=/files/1/Mechanical.pdf#page=1"></iframe>
-                    <iframe class="plans-single" id="plans-2" src="http://projects.buildingintellect.local:48503/pdfjs/web/viewer.html?file=/files/1/Mechanical.pdf#page=2"></iframe>
+                    <iframe class="plans-single" id="plans-1" src=""></iframe>
+                    <iframe class="plans-single" id="plans-2" src=""></iframe>
                 </div>
                 <div class="row">
-                    <iframe class="plans-single" id="plans-3" src="http://projects.buildingintellect.local:48503/pdfjs/web/viewer.html?file=/files/1/Mechanical.pdf#page=3"></iframe>
-                    <iframe class="plans-single" id="plans-4" src="http://projects.buildingintellect.local:48503/pdfjs/web/viewer.html?file=/files/1/Mechanical.pdf#page=4"></iframe>
+                    <span class="pull-left plans-label">
+                        <label id="plans-1-label">Page Title</label>
+                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-1">Expand</button>
+                    </span>
+                    <span class="pull-right plans-label">
+                        <label id="plans-2-label">Page Title</label>
+                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-2">Expand</button>
+                    </span>
+                </div>
+                <div class="row">
+                    <iframe class="plans-single" id="plans-3" src=""></iframe>
+                    <iframe class="plans-single" id="plans-4" src=""></iframe>
+                </div>
+                <div class="row">
+                    <span class="pull-left plans-label">
+                        <label id="plans-3-label">Page Title</label>
+                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-3">Expand</button>
+                    </span>
+                    <span class="pull-right plans-label">
+                        <label id="plans-4-label">Page Title</label>
+                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-4">Expand</button>
+                    </span>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer plans-footer">
                 <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">{{ @dict.cancel }}</button>
             </div>
         </div>
