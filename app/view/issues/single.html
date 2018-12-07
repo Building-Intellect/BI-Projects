@@ -94,7 +94,7 @@
             <check if="{{ @issue.type_id == @issue_type.project }}">
                 <p>
                     <a href="{{ @BASE }}/issues/project/{{ @issue.id }}" class="btn btn-default btn-sm">{{ @dict.project_overview }}</a>
-                    <a class="btn btn-default btn-sm" data-toggle="modal" href="#" data-target="#project_plans">{{ @dict.project_plans }}</a>
+                    <a class="btn btn-default btn-sm" data-toggle="modal" href="#" data-target="#project_plans" onclick="initializePdfViewer();">{{ @dict.project_plans }}</a>
                 </p>
             </check>
 
@@ -395,8 +395,25 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <iframe class="plans-single" id="plans-1" src=""></iframe>
-                    <iframe class="plans-single" id="plans-2" src=""></iframe>
+                    <button id="upload-button">Select PDF</button>
+                    <input type="file" id="file-to-upload" accept="application/pdf" />
+
+                    <div id="pdf-main-container">
+                    	<div id="pdf-loader">Loading document ...</div>
+                    	<div id="pdf-contents">
+                    		<div id="pdf-meta">
+                    			<div id="pdf-buttons">
+                    				<button id="pdf-prev">Previous</button>
+                    				<button id="pdf-next">Next</button>
+                    			</div>
+                    			<div id="page-count-container">Page <div id="pdf-current-page"></div> of <div id="pdf-total-pages"></div></div>
+                    		</div>
+                    		<canvas id="pdf-canvas" width="400"></canvas>
+                    		<div id="page-loader">Loading page ...</div>
+                    	</div>
+                    </div>
+                    <!--<iframe class="plans-single" id="plans-1" src=""></iframe>
+                    <iframe class="plans-single" id="plans-2" src=""></iframe>-->
                 </div>
                 <div class="row">
                     <span class="pull-left plans-label">
