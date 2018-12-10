@@ -67,40 +67,31 @@
 		__CANVAS = $('#pdf-canvas').get(0);
 		__CANVAS_CTX = __CANVAS.getContext('2d');
 
-		// Upon click this should should trigger click on the #file-to-upload file input element
-		// This is better than showing the not-good-looking file input element
-		$("#upload-button").on('click', function() {
-			$("#file-to-upload").trigger('click');
-		});
-
 		// When user chooses a PDF file
-		$("#file-to-upload").on('change', function() {
-			// Validate whether PDF
-		    if(['application/pdf'].indexOf($("#file-to-upload").get(0).files[0].type) == -1) {
-		        alert('Error : Not a PDF');
-		        return;
-		    }
-
-			$("#upload-button").hide();
-
-			// Send the object url of the pdf
-			showPDF(URL.createObjectURL($("#file-to-upload").get(0).files[0]));
+		$("#plans-select").on('change', function() {
+			// TODO: validate whether file is pdf
+			var pdf_file = $("#plans-select").val();
+			showPDF(pdf_file);
 		});
 
-		// Previous page of the PDF
-		$("#pdf-prev").on('click', function() {
+		// Previous 4 pages of the PDF
+		$("#plans-prev-4").on('click', function() {
 			if(__CURRENT_PAGE != 1)
 				showPage(--__CURRENT_PAGE);
 		});
 
-		// Next page of the PDF
-		$("#pdf-next").on('click', function() {
+		// Next 4 pages of the PDF
+		$("#plans-next-4").on('click', function() {
 			if(__CURRENT_PAGE != __TOTAL_PAGES)
 				showPage(++__CURRENT_PAGE);
 		});
+
+		var pdf_file = $("#plans-select").val();
+		showPDF(pdf_file);
 	}
 
 	function showPDF(pdf_url) {
+		$("#pdf-canvas").hide();
 		$("#pdf-loader").show();
 
 		PDFJS.getDocument({ url: pdf_url }).then(function(pdf_doc) {
@@ -111,14 +102,12 @@
 			$("#pdf-loader").hide();
 			$("#pdf-contents").show();
 			$("#pdf-total-pages").text(__TOTAL_PAGES);
-
 			// Show the first page
 			showPage(1);
-		}).catch(function(error) {
-			// If error re-show the upload button
-			$("#pdf-loader").hide();
-			$("#upload-button").show();
 
+		}).catch(function(error) {
+			// If error hide loader and trigger alert
+			$("#pdf-loader").hide();
 			alert(error.message);
 		});;
 	}
@@ -128,7 +117,7 @@
 		__CURRENT_PAGE = page_no;
 
 		// Disable Prev & Next buttons while page is being loaded
-		$("#pdf-next, #pdf-prev").attr('disabled', 'disabled');
+		$("#plans-next-4, #plans-prev-4").attr('disabled', 'disabled');
 
 		// While page is being rendered hide the canvas and show a loading message
 		$("#pdf-canvas").hide();
@@ -156,10 +145,8 @@
 			// Render the page contents in the canvas
 			page.render(renderContext).then(function() {
 				__PAGE_RENDERING_IN_PROGRESS = 0;
-
 				// Re-enable Prev & Next buttons
-				$("#pdf-next, #pdf-prev").removeAttr('disabled');
-
+				$("#plans-next-4, #plans-prev-4").removeAttr('disabled');
 				// Show the canvas and hide the page loader
 				$("#pdf-canvas").show();
 				$("#page-loader").hide();

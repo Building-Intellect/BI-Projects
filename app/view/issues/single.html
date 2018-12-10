@@ -376,11 +376,12 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{ @dict.close }}</span></button>
                 <h4 class="modal-title pull-left">{{ @dict.project_plans }}</h4>
+                <div class="pull-left" id="page-count-container">Page <div id="pdf-current-page"></div> of <div id="pdf-total-pages"></div></div>
                 <div class="pull-right">
-                    <select class=" plans-control" id="plans-documents">
-                        <option selected>Mechanical</option>
-                        <option selected>Architectural</option>
-                        <option selected>Landscape</option>
+                    <select class="plans-control" id="plans-select">
+                        <option value="{{ @BASE }}/files/2/MechanicalOCR.pdf" selected>Mechanical</option>
+                        <option value="{{ @BASE }}/files/3/Mechanical.pdf" >Architectural</option>
+                        <option value="{{ @BASE }}/files/4/Floorplans.pdf" >Landscape</option>
                     </select>
                     <select class="plans-control" id="plans-pages">
                         <option selected>Page 1</option>
@@ -395,20 +396,10 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <button id="upload-button">Select PDF</button>
-                    <input type="file" id="file-to-upload" accept="application/pdf" />
-
-                    <div id="pdf-main-container">
+                    <div class="plans-single">
                     	<div id="pdf-loader">Loading document ...</div>
                     	<div id="pdf-contents">
-                    		<div id="pdf-meta">
-                    			<div id="pdf-buttons">
-                    				<button id="pdf-prev">Previous</button>
-                    				<button id="pdf-next">Next</button>
-                    			</div>
-                    			<div id="page-count-container">Page <div id="pdf-current-page"></div> of <div id="pdf-total-pages"></div></div>
-                    		</div>
-                    		<canvas id="pdf-canvas" width="400"></canvas>
+                    		<canvas id="pdf-canvas"></canvas>
                     		<div id="page-loader">Loading page ...</div>
                     	</div>
                     </div>

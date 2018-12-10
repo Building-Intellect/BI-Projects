@@ -70,21 +70,6 @@
     text-align: center;
 }
 
-#upload-button {
-	width: 150px;
-	display: block;
-	margin: 20px auto;
-}
-
-#file-to-upload {
-	display: none;
-}
-
-#pdf-main-container {
-	width: 400px;
-	margin: 20px auto;
-}
-
 #pdf-loader {
 	display: none;
 	text-align: center;
@@ -98,17 +83,8 @@
 	display: none;
 }
 
-#pdf-meta {
-	overflow: hidden;
-	margin: 0 0 20px 0;
-}
-
-#pdf-buttons {
-	float: left;
-}
-
 #page-count-container {
-	float: right;
+	margin-left: 30px;
 }
 
 #pdf-current-page {
@@ -120,6 +96,8 @@
 }
 
 #pdf-canvas {
+    width: 100%;
+    height: 100%;
 	border: 1px solid rgba(0,0,0,0.2);
 	box-sizing: border-box;
 }
