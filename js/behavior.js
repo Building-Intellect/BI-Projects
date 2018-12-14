@@ -100,7 +100,7 @@
 
 			// Hide the pdf loader and show pdf container in HTML
 			$("#pdf-loader").hide();
-			$("#pdf-contents").show();
+			$(".pdf-contents").show();
 			$("#pdf-total-pages").text(__TOTAL_PAGES);
 			// Show the first page
 			showPage(1);
