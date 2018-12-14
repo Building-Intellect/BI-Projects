@@ -44,6 +44,8 @@
 .plans-viewer {
     width: 85%;
     height: 95%;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .plans-viewer-content {
@@ -70,6 +72,7 @@
 
 .plans-footer {
     text-align: center;
+    padding: 5px;
 }
 
 #pdf-loader {

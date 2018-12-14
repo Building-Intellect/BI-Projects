@@ -59,62 +59,77 @@
 		__CURRENT_PAGE,
 		__TOTAL_PAGES,
 		__PAGE_RENDERING_IN_PROGRESS,
+		__PAGE_NUM_PENDING,
 		__CANVAS,
-		__CANVAS_CTX;
+		__CANVAS_CTX,
+		__CANVAS_CONTAINER;
+
+	pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker1.js';
 
 	window.initializePdfViewer = function () {
-		__PAGE_RENDERING_IN_PROGRESS = 0;
+		__PAGE_RENDERING_IN_PROGRESS = false;
+		__PAGE_NUM_PENDING = null;
 		__CANVAS = $('#pdf-canvas').get(0);
 		__CANVAS_CTX = __CANVAS.getContext('2d');
-
+		__CANVAS_CONTAINER = document.getElementById('pdf-container');
 		// When user chooses a PDF file
 		$("#plans-select").on('change', function() {
 			// TODO: validate whether file is pdf
 			var pdf_file = $("#plans-select").val();
 			showPDF(pdf_file);
 		});
-
 		// Previous 4 pages of the PDF
 		$("#plans-prev-4").on('click', function() {
 			if(__CURRENT_PAGE != 1)
-				showPage(--__CURRENT_PAGE);
+				queuePage(--__CURRENT_PAGE);
 		});
-
 		// Next 4 pages of the PDF
 		$("#plans-next-4").on('click', function() {
 			if(__CURRENT_PAGE != __TOTAL_PAGES)
-				showPage(++__CURRENT_PAGE);
+				queuePage(++__CURRENT_PAGE);
 		});
-
 		var pdf_file = $("#plans-select").val();
 		showPDF(pdf_file);
+	}
+
+	/**
+	* If another page rendering in progress, waits until the rendering is
+	* finised. Otherwise, executes rendering immediately.
+	*/
+	function queuePage(num) {
+		if (__PAGE_RENDERING_IN_PROGRESS) {
+			__PAGE_NUM_PENDING = num;
+		} else {
+			showPage(num);
+		}
 	}
 
 	function showPDF(pdf_url) {
 		$("#pdf-canvas").hide();
 		$("#pdf-loader").show();
 
-		PDFJS.getDocument({ url: pdf_url }).then(function(pdf_doc) {
+		var docLoadingTask = pdfjsLib.getDocument({ url: pdf_url });
+		docLoadingTask.promise.then(function(pdf_doc) {
+			//alert(document.getElementById('pdf-container-1').clientWidth);
+
 			__PDF_DOC = pdf_doc;
 			__TOTAL_PAGES = __PDF_DOC.numPages;
-
 			// Hide the pdf loader and show pdf container in HTML
 			$("#pdf-loader").hide();
 			$(".pdf-contents").show();
 			$("#pdf-total-pages").text(__TOTAL_PAGES);
 			// Show the first page
 			showPage(1);
-
 		}).catch(function(error) {
 			// If error hide loader and trigger alert
 			$("#pdf-loader").hide();
 			alert(error.message);
-		});;
+		});
 	}
 
-	function showPage(page_no) {
-		__PAGE_RENDERING_IN_PROGRESS = 1;
-		__CURRENT_PAGE = page_no;
+	function showPage(page_num) {
+		__PAGE_RENDERING_IN_PROGRESS = true;
+		__CURRENT_PAGE = page_num;
 
 		// Disable Prev & Next buttons while page is being loaded
 		$("#plans-next-4, #plans-prev-4").attr('disabled', 'disabled');
@@ -124,18 +139,24 @@
 		$("#page-loader").show();
 
 		// Update current page in HTML
-		$("#pdf-current-page").text(page_no);
+		$("#pdf-current-page").text(page_num);
 
 		// Fetch the page
-		__PDF_DOC.getPage(page_no).then(function(page) {
-			// As the canvas is of a fixed width we need to set the scale of the viewport accordingly
-			var scale_required = __CANVAS.width / page.getViewport(1).width;
+		__PDF_DOC.getPage(page_num).then(function(page) {
+			var canvasWidth = document.getElementById('pdf-container-1').clientWidth + 100;
+			var canvasHeight = document.getElementById('pdf-container-1').clientHeight + 100;
 
-			// Get viewport of the page at required scale
-			var viewport = page.getViewport(scale_required);
+			// set viewport according to canvas width and height
+			var unscaledViewport = page.getViewport(1.0);
+			var scale = Math.max((canvasWidth / unscaledViewport.height), (canvasHeight / unscaledViewport.width));
+			var viewport = page.getViewport(scale);
 
-			// Set canvas height
+			// or manually set the viewport with specified scale
+			//var viewport = page.getViewport(0.5);
+
+			// Set canvas dimensions
 			__CANVAS.height = viewport.height;
+			__CANVAS.width = viewport.width;
 
 			var renderContext = {
 				canvasContext: __CANVAS_CTX,
@@ -143,8 +164,14 @@
 			};
 
 			// Render the page contents in the canvas
-			page.render(renderContext).then(function() {
-				__PAGE_RENDERING_IN_PROGRESS = 0;
+			var pageRenderTask = page.render(renderContext);
+			pageRenderTask.promise.then(function() {
+				__PAGE_RENDERING_IN_PROGRESS = false;
+				if (__PAGE_NUM_PENDING !== null) {
+					// New page rendering is pending
+					showPage(__PAGE_NUM_PENDING);
+					__PAGE_NUM_PENDING = null;
+				}
 				// Re-enable Prev & Next buttons
 				$("#plans-next-4, #plans-prev-4").removeAttr('disabled');
 				// Show the canvas and hide the page loader
