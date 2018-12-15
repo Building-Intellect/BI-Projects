@@ -161,7 +161,7 @@
 		// Update current pages in HTML
 		var currentFirstPage = page_num;
 		var currentLastPage = page_num + 3;
-		$("#pdf-current-page").text(currentFirstPage + '-' + currentLastPage);
+		$("#pdf-current-pages").text('Pages ' + currentFirstPage + '-' + currentLastPage + ' of ');
 
 		// Fetch the first page
 		__PDF_DOC.getPage(page_num).then(function(page) {
