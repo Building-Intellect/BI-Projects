@@ -60,18 +60,33 @@
 		__TOTAL_PAGES,
 		__PAGE_RENDERING_IN_PROGRESS,
 		__PAGE_NUM_PENDING,
-		__CANVAS,
-		__CANVAS_CTX,
-		__CANVAS_CONTAINER;
+		__SINGLE_HEIGHT,
+		__SINGLE_WIDTH,
+		__CANVAS_1,
+		__CANVAS_CTX_1,
+		__CANVAS_2,
+		__CANVAS_CTX_2,
+		__CANVAS_3,
+		__CANVAS_CTX_3,
+		__CANVAS_4,
+		__CANVAS_CTX_4;
 
-	pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker1.js';
+	pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
 
+	// initialize variables and event handlers for viewer lightbox
 	window.initializePdfViewer = function () {
 		__PAGE_RENDERING_IN_PROGRESS = false;
 		__PAGE_NUM_PENDING = null;
-		__CANVAS = $('#pdf-canvas').get(0);
-		__CANVAS_CTX = __CANVAS.getContext('2d');
-		__CANVAS_CONTAINER = document.getElementById('pdf-container');
+
+		__CANVAS_1 = $('#pdf-canvas-1').get(0);
+		__CANVAS_CTX_1 = __CANVAS_1.getContext('2d');
+		__CANVAS_2 = $('#pdf-canvas-2').get(0);
+		__CANVAS_CTX_2 = __CANVAS_2.getContext('2d');
+		__CANVAS_3 = $('#pdf-canvas-3').get(0);
+		__CANVAS_CTX_3 = __CANVAS_3.getContext('2d');
+		__CANVAS_4 = $('#pdf-canvas-4').get(0);
+		__CANVAS_CTX_4 = __CANVAS_4.getContext('2d');
+
 		// When user chooses a PDF file
 		$("#plans-select").on('change', function() {
 			// TODO: validate whether file is pdf
@@ -85,99 +100,123 @@
 		});
 		// Next 4 pages of the PDF
 		$("#plans-next-4").on('click', function() {
-			if(__CURRENT_PAGE != __TOTAL_PAGES)
+			if(__CURRENT_PAGE + 3 != __TOTAL_PAGES)
 				queuePage(++__CURRENT_PAGE);
 		});
 		var pdf_file = $("#plans-select").val();
+
 		showPDF(pdf_file);
 	}
 
-	/**
-	* If another page rendering in progress, waits until the rendering is
-	* finised. Otherwise, executes rendering immediately.
-	*/
+	// If other pages are rendering still, waits until completed
 	function queuePage(num) {
 		if (__PAGE_RENDERING_IN_PROGRESS) {
 			__PAGE_NUM_PENDING = num;
 		} else {
-			showPage(num);
+			showPages(num);
 		}
 	}
 
+	// load the pdf into the viewer, render pages, and update total pages
 	function showPDF(pdf_url) {
-		$("#pdf-canvas").hide();
-		$("#pdf-loader").show();
+		$(".pdf-canvas").hide();
+		$(".pdf-loader").show();
 
 		var docLoadingTask = pdfjsLib.getDocument({ url: pdf_url });
 		docLoadingTask.promise.then(function(pdf_doc) {
-			//alert(document.getElementById('pdf-container-1').clientWidth);
 
 			__PDF_DOC = pdf_doc;
 			__TOTAL_PAGES = __PDF_DOC.numPages;
-			// Hide the pdf loader and show pdf container in HTML
-			$("#pdf-loader").hide();
+			// Hide the pdf loader and show pdf containers in HTML
+			$(".pdf-loader").hide();
 			$(".pdf-contents").show();
 			$("#pdf-total-pages").text(__TOTAL_PAGES);
-			// Show the first page
-			showPage(1);
+
+			var elements = document.getElementsByClassName('plans-single');
+			var singleViewer = elements[0];
+			__SINGLE_WIDTH = singleViewer.clientWidth + 100;
+			__SINGLE_HEIGHT = singleViewer.clientHeight + 100;
+
+			// Show the first four pages
+			showPages(1);
 		}).catch(function(error) {
 			// If error hide loader and trigger alert
-			$("#pdf-loader").hide();
+			$(".pdf-loader").hide();
 			alert(error.message);
 		});
 	}
 
-	function showPage(page_num) {
+	// show and hide certain elements and render four pages of pdf
+	function showPages(page_num) {
 		__PAGE_RENDERING_IN_PROGRESS = true;
 		__CURRENT_PAGE = page_num;
 
-		// Disable Prev & Next buttons while page is being loaded
+		// Disable Prev & Next buttons while pages are being loaded
 		$("#plans-next-4, #plans-prev-4").attr('disabled', 'disabled');
 
-		// While page is being rendered hide the canvas and show a loading message
-		$("#pdf-canvas").hide();
-		$("#page-loader").show();
+		// While pages are being rendered hide the canvases and show loading messages
+		$(".pdf-canvas").hide();
+		$(".page-loader").show();
 
-		// Update current page in HTML
-		$("#pdf-current-page").text(page_num);
+		// Update current pages in HTML
+		var currentFirstPage = page_num;
+		var currentLastPage = page_num + 3;
+		$("#pdf-current-page").text(currentFirstPage + '-' + currentLastPage);
 
-		// Fetch the page
+		// Fetch the first page
 		__PDF_DOC.getPage(page_num).then(function(page) {
-			var canvasWidth = document.getElementById('pdf-container-1').clientWidth + 100;
-			var canvasHeight = document.getElementById('pdf-container-1').clientHeight + 100;
+			renderIndividual(page, __CANVAS_1, __CANVAS_CTX_1);
+		});
 
-			// set viewport according to canvas width and height
-			var unscaledViewport = page.getViewport(1.0);
-			var scale = Math.max((canvasWidth / unscaledViewport.height), (canvasHeight / unscaledViewport.width));
-			var viewport = page.getViewport(scale);
+		// Fetch the second page
+		__PDF_DOC.getPage(page_num + 1).then(function(page) {
+			renderIndividual(page, __CANVAS_2, __CANVAS_CTX_2);
+		});
 
-			// or manually set the viewport with specified scale
-			//var viewport = page.getViewport(0.5);
+		// Fetch the third page
+		__PDF_DOC.getPage(page_num + 2).then(function(page) {
+			renderIndividual(page, __CANVAS_3, __CANVAS_CTX_3);
+		});
 
-			// Set canvas dimensions
-			__CANVAS.height = viewport.height;
-			__CANVAS.width = viewport.width;
+		// Fetch the fourth page
+		__PDF_DOC.getPage(page_num + 3).then(function(page) {
+			renderIndividual(page, __CANVAS_4, __CANVAS_CTX_4);
+		});
+	}
 
-			var renderContext = {
-				canvasContext: __CANVAS_CTX,
-				viewport: viewport
-			};
+	// render a single pdf page in a single pdf viewer
+	function renderIndividual(page, canvas, ctx) {
+		// set viewport according to canvas width and height
+		var unscaledViewport = page.getViewport(1.0);
+		var scale = Math.max((__SINGLE_HEIGHT / unscaledViewport.height), (__SINGLE_WIDTH / unscaledViewport.width));
+		var viewport = page.getViewport(scale);
 
-			// Render the page contents in the canvas
-			var pageRenderTask = page.render(renderContext);
-			pageRenderTask.promise.then(function() {
-				__PAGE_RENDERING_IN_PROGRESS = false;
-				if (__PAGE_NUM_PENDING !== null) {
-					// New page rendering is pending
-					showPage(__PAGE_NUM_PENDING);
-					__PAGE_NUM_PENDING = null;
-				}
-				// Re-enable Prev & Next buttons
-				$("#plans-next-4, #plans-prev-4").removeAttr('disabled');
-				// Show the canvas and hide the page loader
-				$("#pdf-canvas").show();
-				$("#page-loader").hide();
-			});
+		// or manually set the viewport with specified scale
+		//var viewport = page.getViewport(0.5);
+
+		// Set canvas dimensions
+		canvas.height = viewport.height;
+		canvas.width = viewport.width;
+
+		var renderContext = {
+			canvasContext: ctx,
+			viewport: viewport
+		};
+
+		// Render the page contents in the canvas
+		var pageRenderTask = page.render(renderContext);
+		pageRenderTask.promise.then(function() {
+			__PAGE_RENDERING_IN_PROGRESS = false;
+			if (__PAGE_NUM_PENDING !== null) {
+				// New page rendering is pending
+				showPages(__PAGE_NUM_PENDING);
+				__PAGE_NUM_PENDING = null;
+			}
+			// Re-enable Prev & Next buttons
+			$("#plans-next-4, #plans-prev-4").removeAttr('disabled');
+			// Show the canvas and hide the page loader
+			$(".pdf-canvas").show();
+			$(".page-loader").hide();
 		});
 	}
 })();
