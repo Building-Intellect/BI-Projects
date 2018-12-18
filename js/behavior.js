@@ -93,18 +93,27 @@
 			var pdf_file = $("#plans-select").val();
 			showPDF(pdf_file);
 		});
-		// Previous 4 pages of the PDF
-		$("#plans-prev-4").on('click', function() {
-			if(__CURRENT_PAGE != 1)
-				queuePage(--__CURRENT_PAGE);
-		});
-		// Next 4 pages of the PDF
-		$("#plans-next-4").on('click', function() {
-			if(__CURRENT_PAGE + 3 != __TOTAL_PAGES)
-				queuePage(++__CURRENT_PAGE);
-		});
-		var pdf_file = $("#plans-select").val();
 
+		// Previous 4 pages of the PDF, unless user is close to first page
+		$("#plans-prev-4").on('click', function() {
+			if(__CURRENT_PAGE - 4 >= 1) {
+				queuePage(__CURRENT_PAGE - 4);
+			} else if (__CURRENT_PAGE - 1 >= 1) {
+				queuePage(__CURRENT_PAGE - 1);
+			}
+		});
+
+		// Next 4 pages of the PDF, unless user is close to total pages
+		$("#plans-next-4").on('click', function() {
+			if(__CURRENT_PAGE + 4 < __TOTAL_PAGES) {
+				queuePage(__CURRENT_PAGE + 4);
+			} else if (__CURRENT_PAGE + 1 <= __TOTAL_PAGES) {
+				queuePage(__CURRENT_PAGE + 1);
+			}
+		});
+
+		// Get pdf file path from select element
+		var pdf_file = $("#plans-select").val();
 		showPDF(pdf_file);
 	}
 
