@@ -94,7 +94,7 @@
             <check if="{{ @issue.type_id == @issue_type.project }}">
                 <p>
                     <a href="{{ @BASE }}/issues/project/{{ @issue.id }}" class="btn btn-default btn-sm">{{ @dict.project_overview }}</a>
-                    <a class="btn btn-default btn-sm" data-toggle="modal" href="#" data-target="#project_plans" onclick="initializePdfViewer();">{{ @dict.project_plans }}</a>
+                    <a class="btn btn-default btn-sm" data-toggle="modal" href="#" data-target="#project_plans" onclick="initializePdfViewer();">{{ @dict.plans_button }}</a>
                 </p>
             </check>
 
@@ -375,7 +375,7 @@
         <div class="modal-content plans-viewer-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{ @dict.close }}</span></button>
-                <h4 class="modal-title pull-left">{{ @dict.project_plans }}</h4>
+                <h4 class="modal-title pull-left">{{ @dict.plans_button }}</h4>
                 <div class="pull-left" id="page-count-container"><span id="pdf-current-pages"></span><span id="pdf-total-pages"></span></div>
                 <div class="pull-right">
                     <select class="plans-control" id="plans-select">
@@ -387,64 +387,64 @@
                         <option selected>Page 1</option>
                     </select>
                     <button type="button" class="btn btn-default btn-xs plans-control" id="plans-prev-4">
-                        <span class="fa fa-angle-double-left"></span> Previous 4
+                        <span class="fa fa-angle-double-left"></span> {{ @dict.plans_prev }}
                     </button>
                     <button type="button" class="btn btn-default btn-xs plans-control" id="plans-next-4">
-                        <span class="fa fa-angle-double-right"></span> Next 4
+                        <span class="fa fa-angle-double-right"></span> {{ @dict.plans_next }}
                     </button>
                 </div>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="plans-single pull-left">
-                    	<div class="pdf-loader">Loading document ...</div>
+                    	<div class="pdf-loader">{{ @dict.plans_doc_loading }}</div>
                     	<div class="pdf-contents">
                     		<canvas id="pdf-canvas-1" class="pdf-canvas"></canvas>
-                    		<div class="page-loader">Loading page ...</div>
+                    		<div class="page-loader">{{ @dict.plans_page_loading }}</div>
                     	</div>
                     </div>
                     <div class="plans-single pull-right">
-                    	<div class="pdf-loader">Loading document ...</div>
+                    	<div class="pdf-loader">{{ @dict.plans_doc_loading }}</div>
                     	<div class="pdf-contents">
                     		<canvas id="pdf-canvas-2" class="pdf-canvas"></canvas>
-                    		<div class="page-loader">Loading page ...</div>
+                    		<div class="page-loader">{{ @dict.plans_page_loading }}</div>
                     	</div>
                     </div>
                 </div>
                 <div class="row">
                     <span class="pull-left plans-label">
                         <label id="plans-1-label">Page Title</label>
-                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-1">Expand</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-1">{{ @dict.plans_expand }}</button>
                     </span>
                     <span class="pull-right plans-label">
                         <label id="plans-2-label">Page Title</label>
-                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-2">Expand</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-2">{{ @dict.plans_expand }}</button>
                     </span>
                 </div>
                 <div class="row">
                     <div class="plans-single pull-left">
-                    	<div class="pdf-loader">Loading document ...</div>
+                    	<div class="pdf-loader">{{ @dict.plans_doc_loading }}</div>
                     	<div class="pdf-contents">
                     		<canvas id="pdf-canvas-3" class="pdf-canvas"></canvas>
-                    		<div class="page-loader">Loading page ...</div>
+                    		<div class="page-loader">{{ @dict.plans_page_loading }}</div>
                     	</div>
                     </div>
                     <div class="plans-single pull-right">
-                    	<div class="pdf-loader">Loading document ...</div>
+                    	<div class="pdf-loader">{{ @dict.plans_doc_loading }}</div>
                     	<div class="pdf-contents">
                     		<canvas id="pdf-canvas-4" class="pdf-canvas"></canvas>
-                    		<div class="page-loader">Loading page ...</div>
+                    		<div class="page-loader">{{ @dict.plans_page_loading }}</div>
                     	</div>
                     </div>
                 </div>
                 <div class="row">
                     <span class="pull-left plans-label">
                         <label id="plans-3-label">Page Title</label>
-                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-3">Expand</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-3">{{ @dict.plans_expand }}</button>
                     </span>
                     <span class="pull-right plans-label">
                         <label id="plans-4-label">Page Title</label>
-                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-4">Expand</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-4">{{ @dict.plans_expand }}</button>
                     </span>
                 </div>
             </div>
