@@ -88,11 +88,16 @@
 		__CANVAS_4 = $('#pdf-canvas-4').get(0);
 		__CANVAS_CTX_4 = __CANVAS_4.getContext('2d');
 
-		// When user chooses a PDF file
+		// When user chooses a pdf file
 		$("#plans-select").on('change', function() {
 			// TODO: validate whether file is pdf
 			__PDF_PATH = $("#plans-select").val();
 			showPDF(__PDF_PATH);
+		});
+
+		// When user chooses a page of the pdf
+		$("#plans-pages").on('change', function() {
+			queuePage($(this).val());
 		});
 
 		// Previous 4 pages of the PDF, unless user is close to first page
@@ -108,7 +113,7 @@
 		$("#plans-next-4").on('click', function() {
 			if(__CURRENT_PAGE + 4 < __TOTAL_PAGES) {
 				queuePage(__CURRENT_PAGE + 4);
-			} else if (__CURRENT_PAGE + 1 <= __TOTAL_PAGES) {
+			} else if (__CURRENT_PAGE + 3 < __TOTAL_PAGES) {
 				queuePage(__CURRENT_PAGE + 1);
 			}
 		});
@@ -134,22 +139,26 @@
 
 		var docLoadingTask = pdfjsLib.getDocument({ url: pdf_url });
 		docLoadingTask.promise.then(function(pdf_doc) {
-
 			__PDF_DOC = pdf_doc;
 			__TOTAL_PAGES = __PDF_DOC.numPages;
+
 			// Hide the pdf loader and show pdf containers in HTML
 			$(".pdf-loader").hide();
 			$(".pdf-contents").show();
 			$("#pdf-total-pages").text(__TOTAL_PAGES);
 
+			// Get dimensions for each pdf canvas
 			var elements = document.getElementsByClassName('plans-single');
 			var singleViewer = elements[0];
 			__SINGLE_WIDTH = singleViewer.clientWidth + 100;
 			__SINGLE_HEIGHT = singleViewer.clientHeight + 100;
 
+			// Populate page select element and expand buttons
+			populatePageSelect();
+			populateExpands();
+
 			// Show the first four pages
 			showPages(1);
-			populateExpands();
 		}).catch(function(error) {
 			// If error hide loader and trigger alert
 			$(".pdf-loader").hide();
@@ -208,7 +217,7 @@
 		// or manually set the viewport with specified scale
 		//var viewport = page.getViewport(0.5);
 
-		// Set canvas dimensions
+		// Set canvas dimension attributes
 		canvas.height = viewport.height;
 		canvas.width = viewport.width;
 
@@ -241,5 +250,14 @@
 			var curPageNum = __CURRENT_PAGE + i;
 			$(this).attr('href', viewerPath + __PDF_PATH + '#page=' + curPageNum);
 		});
+	}
+
+	// populate page select based on total pages for selected pdf
+	function populatePageSelect() {
+		var selectElement = $('#plans-pages'),
+			num;
+		for (num = 1; num <= __TOTAL_PAGES; num++) {
+			selectElement.append('<option value="' + num + '">Page ' + num + '</option>');
+		}
 	}
 })();
