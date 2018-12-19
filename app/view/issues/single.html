@@ -374,6 +374,7 @@
     <div class="modal-dialog plans-viewer">
         <div class="modal-content plans-viewer-content">
             <div class="modal-header">
+                <div id="plans-hidden" viewerPath="{{ @BASE }}/pdfjs/web/viewer.html?file="></div>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{ @dict.close }}</span></button>
                 <h4 class="modal-title pull-left">{{ @dict.plans_button }}</h4>
                 <div class="pull-left" id="page-count-container"><span id="pdf-current-pages"></span><span id="pdf-total-pages"></span></div>
@@ -413,12 +414,16 @@
                 </div>
                 <div class="row">
                     <span class="pull-left plans-label">
-                        <label id="plans-1-label">Page Title</label>
-                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-1">{{ @dict.plans_expand }}</button>
+                        <label id="plans-label-1">Page Title</label>
+                        <a class="plans-expand" target="_blank" rel="noopener noreferrer">
+                            <button type="button" class="btn btn-default btn-xs">{{ @dict.plans_expand }}</button>
+                        </a>
                     </span>
                     <span class="pull-right plans-label">
-                        <label id="plans-2-label">Page Title</label>
-                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-2">{{ @dict.plans_expand }}</button>
+                        <label id="plans-label-2">Page Title</label>
+                        <a class="plans-expand" target="_blank" rel="noopener noreferrer">
+                            <button type="button" class="btn btn-default btn-xs">{{ @dict.plans_expand }}</button>
+                        </a>
                     </span>
                 </div>
                 <div class="row">
@@ -439,12 +444,16 @@
                 </div>
                 <div class="row">
                     <span class="pull-left plans-label">
-                        <label id="plans-3-label">Page Title</label>
-                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-3">{{ @dict.plans_expand }}</button>
+                        <label id="plans-label-3">Page Title</label>
+                        <a class="plans-expand" target="_blank" rel="noopener noreferrer">
+                            <button type="button" class="btn btn-default btn-xs">{{ @dict.plans_expand }}</button>
+                        </a>
                     </span>
                     <span class="pull-right plans-label">
-                        <label id="plans-4-label">Page Title</label>
-                        <button type="button" class="btn btn-default btn-xs" onclick="" id="plans-expand-4">{{ @dict.plans_expand }}</button>
+                        <label id="plans-label-4">Page Title</label>
+                        <a class="plans-expand" target="_blank" rel="noopener noreferrer">
+                            <button type="button" class="btn btn-default btn-xs">{{ @dict.plans_expand }}</button>
+                        </a>
                     </span>
                 </div>
             </div>

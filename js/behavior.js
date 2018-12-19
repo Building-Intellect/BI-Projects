@@ -55,7 +55,8 @@
     };
 
 	// functions and variables for project plans pdf viewer
-	var __PDF_DOC,
+	var __PDF_PATH,
+		__PDF_DOC,
 		__CURRENT_PAGE,
 		__TOTAL_PAGES,
 		__PAGE_RENDERING_IN_PROGRESS,
@@ -90,8 +91,8 @@
 		// When user chooses a PDF file
 		$("#plans-select").on('change', function() {
 			// TODO: validate whether file is pdf
-			var pdf_file = $("#plans-select").val();
-			showPDF(pdf_file);
+			__PDF_PATH = $("#plans-select").val();
+			showPDF(__PDF_PATH);
 		});
 
 		// Previous 4 pages of the PDF, unless user is close to first page
@@ -113,8 +114,8 @@
 		});
 
 		// Get pdf file path from select element
-		var pdf_file = $("#plans-select").val();
-		showPDF(pdf_file);
+		__PDF_PATH = $("#plans-select").val();
+		showPDF(__PDF_PATH);
 	}
 
 	// If other pages are rendering still, waits until completed
@@ -148,6 +149,7 @@
 
 			// Show the first four pages
 			showPages(1);
+			populateExpands();
 		}).catch(function(error) {
 			// If error hide loader and trigger alert
 			$(".pdf-loader").hide();
@@ -166,6 +168,9 @@
 		// While pages are being rendered hide the canvases and show loading messages
 		$(".pdf-canvas").hide();
 		$(".page-loader").show();
+
+		// Populate expand button links with correct page numbers
+		populateExpands();
 
 		// Update current pages in HTML
 		var currentFirstPage = page_num;
@@ -226,6 +231,15 @@
 			// Show the canvas and hide the page loader
 			$(".pdf-canvas").show();
 			$(".page-loader").hide();
+		});
+	}
+
+	// populate the expand links based on pages and selected pdf
+	function populateExpands() {
+		var viewerPath = $("#plans-hidden").attr('viewerPath');
+		$(".plans-expand").each(function(i) {
+			var curPageNum = __CURRENT_PAGE + i;
+			$(this).attr('href', viewerPath + __PDF_PATH + '#page=' + curPageNum);
 		});
 	}
 })();

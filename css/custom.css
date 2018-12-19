@@ -110,6 +110,10 @@
 	display: inline;
 }
 
+#plans-hidden {
+    display: none !important;
+}
+
 .pdf-canvas {
     width: 100%;
     height: 100%;
