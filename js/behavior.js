@@ -118,7 +118,8 @@
 			}
 		});
 
-		// Get pdf file path from select element
+		// Get pdf file path from select element after filtering
+		filterAndSelectPlans();
 		__PDF_PATH = $("#plans-select").val();
 		showPDF(__PDF_PATH);
 	}
@@ -257,24 +258,40 @@
 
 	// returns page title for passed page
 	function getPageTitle(page, page_num) {
-		getPageText(page, 21.5).then(function(text) {
-			var regexTitleCode = /[A-Z0-9][A-Z0-9][.][0-9][0-9]/g
-			var regexTitleWords = /NE|NW|SE|SW|[A-Z0-9][A-Z][A-Z]\w*/g;
-			var titleWords = text.match(regexTitleWords);
-			var titleCode = text.match(regexTitleCode);
-			var found = titleWords.concat(titleCode);
-			console.log('page ' + page_num + ': ' + found.join(' '));//.substring(leftIndex, rightIndex));
-		}, function(error) {
-			console.error(error);
-		});
+		try {
+			getPageText(page, 21.5, 50.0).then(function(text) {
+				var regexTitleCode = /[A-Z0-9][A-Z0-9][.][0-9][0-9]/g
+				var regexTitleWords = /NE|NW|SE|SW|[A-Z0-9][A-Z][A-Z]\w*/g;
+				var titleWords = text.match(regexTitleWords);
+				var titleCode = text.match(regexTitleCode);
+				var found = titleWords.concat(titleCode);
+				found = filterPageTitle(found);
+				console.log('page ' + page_num + ': ' + found.join(' '));
+			}, function(error) {
+				console.log('page ' + page_num + ' title not found');
+			});
+		} catch (error) {
+			console.log('page ' + page_num + ' title not found');
+		}
 	}
 
-	// returns text string of the passed pdf page larger than passed height
-	function getPageText(page, height) {
+	// Filters page title by removing known words and duplicate words
+	// Removing duplicates currently messes up the ordering of words
+	function filterPageTitle(words) {
+		var toRemove = ['BELLEVUE', 'SCHOOL', 'DISTRICT', 'STEVENSON', 'SHR',
+			'ELEMENTARY', 'ELELMENTARY', 'GIN', 'EER', 'METRIX', 'ENGINEER'];
+		words = words.filter( function( word ) {
+			return !toRemove.includes( word );
+		});
+		return Array.from(new Set(words));
+	}
+
+	// returns text string of the passed pdf page within height bounds
+	function getPageText(page, minHeight, maxHeight) {
 		var textContent = page.getTextContent();
         return textContent.then(function(text) {
             return text.items.map(function(s) {
-				if (s.height > height) {
+				if (s.height > minHeight && s.height < maxHeight) {
 					console.log(s.height);
 					return s.str;
 				}
@@ -323,5 +340,16 @@
 		for (num = 1; num <= __TOTAL_PAGES; num++) {
 			selectElement.append('<option value="' + num + '">Page ' + num + '</option>');
 		}
+	}
+
+	// handler to ensure only pdf files can be selected
+	// returns first pdf file option from select
+	function filterAndSelectPlans() {
+		$("#plans-select > option").each(function() {
+			if (!this.value.endsWith('.pdf')) {
+				$(this).remove();
+			}
+		});
+		$("#plans-select").val($("#plans-select option:first").val());
 	}
 })();

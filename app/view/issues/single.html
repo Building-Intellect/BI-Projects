@@ -379,10 +379,11 @@
                 <h4 class="modal-title pull-left">{{ @dict.plans_button }}</h4>
                 <div class="pull-left" id="page-count-container"><span id="pdf-current-pages"></span><span id="pdf-total-pages"></span></div>
                 <div class="pull-right">
+
                     <select class="plans-control" id="plans-select">
-                        <option value="{{ @BASE }}/files/2/MechanicalOCR.pdf" selected>Mechanical</option>
-                        <option value="{{ @BASE }}/files/3/Mechanical.pdf" >Architectural</option>
-                        <option value="{{ @BASE }}/files/4/Floorplans.pdf" >Landscape</option>
+                        <repeat group="{{ @files }}" value="{{ @file }}">
+                            <option value="{{ @BASE }}/files/{{ @file.id }}/{{ @file.filename | esc }}">{{ @file.filename | esc }}</option>
+                        </repeat>
                     </select>
                     <select class="plans-control" id="plans-pages"></select>
                     <button type="button" class="btn btn-default btn-xs plans-control" id="plans-prev-4">
