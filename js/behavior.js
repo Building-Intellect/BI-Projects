@@ -137,6 +137,14 @@
 		$(".pdf-canvas").hide();
 		$(".pdf-loader").show();
 
+		/* TODO: use this to get all page titles for page selecr
+		getDocumentText(pdf_url).then(function(text) {
+			alert('parse ' + text);
+		}, function(error) {
+			console.error(error);
+		});
+		*/
+
 		var docLoadingTask = pdfjsLib.getDocument({ url: pdf_url });
 		docLoadingTask.promise.then(function(pdf_doc) {
 			__PDF_DOC = pdf_doc;
@@ -189,21 +197,25 @@
 		// Fetch the first page
 		__PDF_DOC.getPage(page_num).then(function(page) {
 			renderIndividual(page, __CANVAS_1, __CANVAS_CTX_1);
+			getPageTitle(page, page_num);
 		});
 
 		// Fetch the second page
 		__PDF_DOC.getPage(page_num + 1).then(function(page) {
 			renderIndividual(page, __CANVAS_2, __CANVAS_CTX_2);
+			getPageTitle(page, page_num + 1);
 		});
 
 		// Fetch the third page
 		__PDF_DOC.getPage(page_num + 2).then(function(page) {
 			renderIndividual(page, __CANVAS_3, __CANVAS_CTX_3);
+			getPageTitle(page, page_num + 2);
 		});
 
 		// Fetch the fourth page
 		__PDF_DOC.getPage(page_num + 3).then(function(page) {
 			renderIndividual(page, __CANVAS_4, __CANVAS_CTX_4);
+			getPageTitle(page, page_num + 3);
 		});
 	}
 
@@ -240,6 +252,58 @@
 			// Show the canvas and hide the page loader
 			$(".pdf-canvas").show();
 			$(".page-loader").hide();
+		});
+	}
+
+	// returns page title for passed page
+	function getPageTitle(page, page_num) {
+		getPageText(page, 21.5).then(function(text) {
+			var regexTitleCode = /[A-Z0-9][A-Z0-9][.][0-9][0-9]/g
+			var regexTitleWords = /NE|NW|SE|SW|[A-Z0-9][A-Z][A-Z]\w*/g;
+			var titleWords = text.match(regexTitleWords);
+			var titleCode = text.match(regexTitleCode);
+			var found = titleWords.concat(titleCode);
+			console.log('page ' + page_num + ': ' + found.join(' '));//.substring(leftIndex, rightIndex));
+		}, function(error) {
+			console.error(error);
+		});
+	}
+
+	// returns text string of the passed pdf page larger than passed height
+	function getPageText(page, height) {
+		var textContent = page.getTextContent();
+        return textContent.then(function(text) {
+            return text.items.map(function(s) {
+				if (s.height > height) {
+					console.log(s.height);
+					return s.str;
+				}
+			}).join('');
+        });
+	}
+
+	// returns string with text from entire pdf
+	function getDocumentText(pdfUrl) {
+		var pdf = pdfjsLib.getDocument({ url: pdfUrl });
+		return pdf.then(function(pdf) { // get all pages text
+			var maxPages = pdf.numPages;
+			var countPromises = []; // collecting all page promises
+			for (var j = 1; j <= maxPages; j++) {
+				var page = pdf.getPage(j);
+				var txt = "";
+				countPromises.push(page.then(function(page) { // add page promise
+					var textContent = page.getTextContent();
+					return textContent.then(function(text) { // return content promise
+						return text.items.map(function(s) {
+							return s.str;
+						}).join(''); // value page text
+					});
+				}));
+			}
+			// Wait for all pages and join text
+			return Promise.all(countPromises).then(function (texts) {
+				return texts.join('');
+			});
 		});
 	}
 
