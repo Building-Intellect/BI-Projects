@@ -70,11 +70,7 @@ class User extends \Controller
         $f3->set("dashboard", $dashboard);
         $f3->set("menuitem", "index");
 
-        // Workaround for dashboard issue related to projects nav
-        $curUser = $f3->get("user_obj");
-        if ($curUser->role != 'admin') {
-            $this->loadGroupsUsersProjects($f3);
-        }
+        $this->loadGroupsUsersProjects($f3);
         $this->_render("user/dashboard.html");
     }
 

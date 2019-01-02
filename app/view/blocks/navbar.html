@@ -95,11 +95,11 @@
                         {{ @dict.projects }} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <check if="@projects">
+                        <check if="@accessProjects">
                             <true>
                                 <li role="presentation" class="dropdown-header">{{ @dict.my_projects }}</li>
-                                <repeat group="{{ @projects }}" value="{{ @project }}">
-                                    <li><a href="{{ @BASE }}/issues?parent_id={{ @project.id }}&amp;status=open">{{ @project.name | esc }}</a></li>
+                                <repeat group="{{ @accessProjects }}" value="{{ @curProject }}">
+                                    <li><a href="{{ @BASE }}/issues?parent_id={{ @curProject.id }}&amp;status=open">{{ @curProject.name | esc }}</a></li>
                                 </repeat>
                             </true>
                             <false>

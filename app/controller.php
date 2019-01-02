@@ -98,13 +98,13 @@ abstract class Controller
         $users = new \Model\User;
         $issues = new \Model\Issue;
         if ($user->role == 'admin') {
-            $f3->set("users", $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC")));
-            $f3->set("groups", $users->find("deleted_date IS NULL AND role = 'group'", array("order" => "name ASC")));
-            $f3->set("projects", $issues->find("deleted_date IS NULL AND type_id = 1", array("order" => "name ASC")));
+            $f3->set("accessUsers", $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC")));
+            $f3->set("accessGroups", $users->find("deleted_date IS NULL AND role = 'group'", array("order" => "name ASC")));
+            $f3->set("accessProjects", $issues->find("deleted_date IS NULL AND type_id = 1", array("order" => "name ASC")));
         } else {
             $groups = new \Model\User\Group;
             $userGroups = $groups->getUserGroups($f3->get("user.id"));
-            $f3->set("groups", $userGroups);
+            $f3->set("accessGroups", $userGroups);
             $allUsers = $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC"));
             $groupUsers;
             $groupProjects = Array();
@@ -119,8 +119,8 @@ abstract class Controller
                     }
                 }
             }
-			$f3->set("projects", $groupProjects);
-            $f3->set("users", $groupUsers);
+			$f3->set("accessProjects", $groupProjects);
+            $f3->set("accessUsers", $groupUsers);
         }
     }
 

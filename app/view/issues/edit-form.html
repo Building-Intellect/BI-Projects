@@ -27,7 +27,7 @@
         <div class="col-md-6">
             <select class="form-control input-sm" name="group_id" required>
                 <optgroup label="{{ @dict.groups }}">
-                    <repeat group="{{ @groups }}" value="{{ @group }}">
+                    <repeat group="{{ @accessGroups }}" value="{{ @group }}">
                         <check if="{{ !empty(@issue) && @issue.group_id == @group.id }}">
                             <true><option value="{{ @group.id }}" selected>{{ @group.name | esc }}</option></true>
                             <false><option value="{{ @group.id }}">{{ @group.name | esc }}</option></false>
@@ -45,10 +45,10 @@
                 <false>
                     <select class="form-control input-sm" name="parent_id">
                         <optgroup label="{{ @dict.project }}">
-                            <repeat group="{{ @projects }}" value="{{ @project }}">
-                                <check if="{{ !empty(@issue) && @issue.parent_id == @project.id }}">
-                                    <true><option value="{{ @project.id }}" selected>{{ @project.name | esc }}</option></true>
-                                    <false><option value="{{ @project.id }}">{{ @project.name | esc }}</option></false>
+                            <repeat group="{{ @accessProjects }}" value="{{ @curProject }}">
+                                <check if="{{ !empty(@issue) && @issue.parent_id == @curProject.id }}">
+                                    <true><option value="{{ @curProject.id }}" selected>{{ @curProject.name | esc }}</option></true>
+                                    <false><option value="{{ @curProject.id }}">{{ @curProject.name | esc }}</option></false>
                                 </check>
                             </repeat>
                         </optgroup>
@@ -71,14 +71,14 @@
                     </check>
                     <label for="0"><input type="checkbox" onclick="handleNoneCheckbox()" id="0" value="{{ @dict.no_notifications }}" {{ empty(@issue) ? 'selected' : '' }}/> {{ @dict.no_notifications | esc}}</label>
                     <label>{{ @dict.groups }}</label>
-                    <repeat group="{{ @groups }}" value="{{ @group }}">
+                    <repeat group="{{ @accessGroups }}" value="{{ @group }}">
                         <check if="{{ !empty(@issue) && @issue.author_id == @group.id }}">
                             <true><label for="{{ @group.id }}"><input type="checkbox" name="notify[]" id="{{ @group.id }}" value="{{ @group.id }}" checked/> {{ @group.name | esc}}</label></true>
                             <false><label for="{{ @group.id }}"><input type="checkbox" name="notify[]" id="{{ @group.id }}" value="{{ @group.id }}"/> {{ @group.name | esc}}</label></false>
                         </check>
                     </repeat>
                     <label>{{ @dict.users }}</label>
-                    <repeat group="{{ @users }}" value="{{ @item }}">
+                    <repeat group="{{ @accessUsers }}" value="{{ @item }}">
                         <check if="{{ !empty(@issue) && @issue.owner_id == @item.id }}">
                             <true><label for="{{ @item.id }}"><input type="checkbox" name="notify[]" id="{{ @item.id }}" value="{{ @item.id }}" checked/> {{ @item.name | esc}}</label></true>
                             <false><label for="{{ @item.id }}"><input type="checkbox" name="notify[]" id="{{ @item.id }}" value="{{ @item.id }}"/> {{ @item.name | esc}}</label></false>
@@ -177,7 +177,7 @@
                     </check>
                     <option value="{{ @user.id }}" {{ empty(@issue) ? 'selected' : '' }}>{{ @user.name | esc }}</option>
                     <optgroup label="{{ @dict.groups }}">
-                        <repeat group="{{ @groups }}" value="{{ @group }}">
+                        <repeat group="{{ @accessGroups }}" value="{{ @group }}">
                             <check if="{{ !empty(@issue) && @issue.author_id == @group.id }}">
                                 <true><option value="{{ @group.id }}" selected>{{ @group.name | esc }}</option></true>
                                 <false><option value="{{ @group.id }}">{{ @group.name | esc }}</option></false>
@@ -185,7 +185,7 @@
                         </repeat>
                     </optgroup>
                     <optgroup label="{{ @dict.users }}">
-                        <repeat group="{{ @users }}" value="{{ @item }}">
+                        <repeat group="{{ @accessUsers }}" value="{{ @item }}">
                             <check if="{{ !empty(@issue) && @issue.author_id == @item.id }}">
                                 <true><option value="{{ @item.id }}" selected>{{ @item.name | esc }}</option></true>
                                 <false><option value="{{ @item.id }}">{{ @item.name | esc }}</option></false>
@@ -209,7 +209,7 @@
                 </check>
                 <option value="{{ @user.id }}" {{ empty(@issue) ? 'selected' : '' }}>{{ @user.name | esc }}</option>
                 <optgroup label="{{ @dict.groups }}">
-                    <repeat group="{{ @groups }}" value="{{ @group }}">
+                    <repeat group="{{ @accessGroups }}" value="{{ @group }}">
                         <check if="{{ !empty(@issue) && @issue.owner_id == @group.id }}">
                             <true><option value="{{ @group.id }}" selected>{{ @group.name | esc }}</option></true>
                             <false><option value="{{ @group.id }}">{{ @group.name | esc }}</option></false>
@@ -217,7 +217,7 @@
                     </repeat>
                 </optgroup>
                 <optgroup label="{{ @dict.users }}">
-                    <repeat group="{{ @users }}" value="{{ @item }}">
+                    <repeat group="{{ @accessUsers }}" value="{{ @item }}">
                         <check if="{{ !empty(@issue) && @issue.owner_id == @item.id }}">
                             <true><option value="{{ @item.id }}" selected>{{ @item.name | esc }}</option></true>
                             <false><option value="{{ @item.id }}">{{ @item.name | esc }}</option></false>
