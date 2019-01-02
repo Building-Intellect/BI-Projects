@@ -53,6 +53,7 @@ class Admin extends \Controller
             $f3->set("apc_stats", apc_cache_info("user", true));
         }
 
+        $this->loadGroupsUsersProjects($f3);
         $this->_render("admin/index.html");
     }
 
@@ -64,8 +65,8 @@ class Admin extends \Controller
     {
         $status = new \Model\Issue\Status;
         $f3->set("issue_statuses", $status->find());
-
         $f3->set("title", $f3->get("dict.configuration"));
+        $this->loadGroupsUsersProjects($f3);
         $this->_render("admin/config.html");
     }
 
@@ -127,6 +128,7 @@ class Admin extends \Controller
     public function plugins(\Base $f3)
     {
         $f3->set("title", $f3->get("dict.plugins"));
+        $this->loadGroupsUsersProjects($f3);
         $this->_render("admin/plugins.html");
     }
 
@@ -163,7 +165,7 @@ class Admin extends \Controller
         $users = new \Model\User();
         $f3->set("users", $users->find("deleted_date IS NULL AND role != 'group'"));
         $f3->set("select_users", $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC")));
-
+        $this->loadGroupsUsersProjects($f3);
         $this->_render("admin/users.html");
     }
 
@@ -394,7 +396,6 @@ class Admin extends \Controller
             );
         }
         $f3->set("groups", $group_array);
-
         $this->_render("admin/groups.html");
     }
 

@@ -217,12 +217,12 @@ class Issues extends \Controller
         }
         $f3->set("pages", range($min, $max));
         $f3->set("filter_get", $filter_get);
-
         $f3->set("menuitem", "browse");
         $f3->set("heading_links_enabled", true);
-
         $f3->set("show_filters", true);
         $f3->set("show_export", true);
+
+        $this->loadGroupsUsersProjects($f3);
 
         $this->_render("issues/index.html");
     }
@@ -378,35 +378,7 @@ class Issues extends \Controller
             return;
         }
 
-        // Load full project, user, group lists if admin user, and load by group access otherwise
-        $user = $f3->get("user_obj");
-        $users = new \Model\User;
-        $issues = new \Model\Issue;
-        if ($user->role == 'admin') {
-            $f3->set("users", $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC")));
-            $f3->set("groups", $users->find("deleted_date IS NULL AND role = 'group'", array("order" => "name ASC")));
-            $f3->set("projects", $issues->find("deleted_date IS NULL AND type_id = 1", array("order" => "name ASC")));
-        } else {
-            $groups = new \Model\User\Group;
-            $userGroups = $groups->getUserGroups($f3->get("user.id"));
-            $f3->set("groups", $userGroups);
-            $allUsers = $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC"));
-            $groupUsers;
-            $groupProjects = Array();
-            foreach($userGroups as $curGroup) {
-                $curGroupProjects = $groups->getGroupProjects($curGroup['id']);
-                foreach($curGroupProjects as $project) {
-                    array_push($groupProjects, $project);
-                }
-                foreach($allUsers as $curUser) {
-                    if ($groups->userIsInGroup($curGroup['id'], $curUser['id'])) {
-                        $groupUsers[] = $curUser;
-                    }
-                }
-            }
-			$f3->set("projects", $groupProjects);
-            $f3->set("users", $groupUsers);
-        }
+        $this->loadGroupsUsersProjects($f3);
 
         $status = new \Model\Issue\Status;
         $f3->set("statuses", $status->find(null, null, $f3->get("cache_expire.db")));
@@ -433,7 +405,6 @@ class Issues extends \Controller
     {
         $type = new \Model\Issue\Type;
         $f3->set("types", $type->find(null, null, $f3->get("cache_expire.db")));
-
         $f3->set("title", $f3->get("dict.new_n", $f3->get("dict.issues")));
         $f3->set("menuitem", "new");
         $this->_render("issues/new.html");
@@ -495,35 +466,7 @@ class Issues extends \Controller
         $sprint = new \Model\Sprint;
         $f3->set("sprints", $sprint->find(array("end_date >= ? OR id = ?", $this->now(false), $issue->sprint_id), array("order" => "start_date ASC, id ASC")));
 
-        // Load full project, user, group lists if admin user, and load by group access otherwise
-        $user = $f3->get("user_obj");
-        $users = new \Model\User;
-        $issues = new \Model\Issue;
-        if ($user->role == 'admin') {
-            $f3->set("users", $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC")));
-            $f3->set("groups", $users->find("deleted_date IS NULL AND role = 'group'", array("order" => "name ASC")));
-            $f3->set("projects", $issues->find("deleted_date IS NULL AND type_id = 1", array("order" => "name ASC")));
-        } else {
-            $groups = new \Model\User\Group;
-            $userGroups = $groups->getUserGroups($f3->get("user.id"));
-            $f3->set("groups", $userGroups);
-            $allUsers = $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC"));
-            $groupUsers;
-            $groupProjects = Array();
-            foreach($userGroups as $curGroup) {
-                $curGroupProjects = $groups->getGroupProjects($curGroup['id']);
-                foreach($curGroupProjects as $project) {
-                    array_push($groupProjects, $project);
-                }
-                foreach($allUsers as $curUser) {
-                    if ($groups->userIsInGroup($curGroup['id'], $curUser['id'])) {
-                        $groupUsers[] = $curUser;
-                    }
-                }
-            }
-			$f3->set("projects", $groupProjects);
-            $f3->set("users", $groupUsers);
-        }
+        $this->loadGroupsUsersProjects($f3);
     }
 
     /**

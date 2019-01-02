@@ -41,7 +41,6 @@
                                 <true>
                                     <li role="presentation" class="dropdown-header">{{ @dict.related }}</li>
                                     <li><a href="{{ @BASE }}/issues/new/{{ @issue_type.task }}/{{ @issue.id }}">{{ @dict.Task }}</a></li>
-                                    <li><a href="{{ @BASE }}/issues/new/{{ @issue_type.project }}/{{ @issue.id }}">{{ @dict.subproject }}</a></li>
                                 </true>
                                 <false>
                                     <li role="presentation" class="dropdown-header">{{ @dict.current_issue }}</li>
@@ -62,6 +61,7 @@
                         </check>
                     </ul>
                 </li>
+
                 <li class="dropdown {{ @menuitem == 'browse' ? 'active':'' }}">
                     <a href="{{ @BASE }}/issues" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" accesskey="b">
                         {{ @dict.browse }} <b class="caret"></b>
@@ -77,9 +77,7 @@
                         <repeat group="{{ @issue_types }}" value="{{ @type }}">
                             <check if="{{ @dict[@type.name]=='Project' }}">
                                 <true>
-                                    <check if="{{ @user.role=='admin' }}">
-                                        <li><a href="{{ @BASE }}/issues?type_id={{ @type.id }}&amp;status=open">{{ isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) }}</a></li>
-                                    </check>
+                                    <li><a href="{{ @BASE }}/issues?type_id={{ @type.id }}&amp;status=open">{{ isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) }}</a></li>
                                 </true>
                                 <false>
                                     <li><a href="{{ @BASE }}/issues?type_id={{ @type.id }}&amp;status=open">{{ isset(@dict[@type.name]) ? @dict[@type.name] : str_replace('_', ' ', @type.name) }}</a></li>
@@ -91,6 +89,26 @@
                         </repeat>
                     </ul>
                 </li>
+
+                <li class="dropdown {{ @menuitem == 'projects' ? 'active':'' }}">
+                    <a href="{{ @BASE }}/issues" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" accesskey="p">
+                        {{ @dict.projects }} <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <check if="@projects">
+                            <true>
+                                <li role="presentation" class="dropdown-header">{{ @dict.my_projects }}</li>
+                                <repeat group="{{ @projects }}" value="{{ @project }}">
+                                    <li><a href="{{ @BASE }}/issues?parent_id={{ @project.id }}&amp;status=open">{{ @project.name | esc }}</a></li>
+                                </repeat>
+                            </true>
+                            <false>
+                                <li role="presentation" class="dropdown-header">{{ @dict.projects_not_found }}</li>
+                            </false>
+                        </check>
+                    </ul>
+                </li>
+
                 <li class="{{ @menuitem == 'tags' ? 'active':'' }}">
                     <a href="{{ @BASE }}/tag">{{ @dict.issue_tags }}</a>
                 </li>

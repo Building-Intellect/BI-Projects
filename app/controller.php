@@ -87,6 +87,44 @@ abstract class Controller
     }
 
     /**
+     * Load groups and users and projects for admin or by group access
+     * @param \Base $f3
+     * @return void
+     */
+    public function loadGroupsUsersProjects($f3)
+    {
+        // Load full project, user, group lists if admin user, and load by group access otherwise
+        $user = $f3->get("user_obj");
+        $users = new \Model\User;
+        $issues = new \Model\Issue;
+        if ($user->role == 'admin') {
+            $f3->set("users", $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC")));
+            $f3->set("groups", $users->find("deleted_date IS NULL AND role = 'group'", array("order" => "name ASC")));
+            $f3->set("projects", $issues->find("deleted_date IS NULL AND type_id = 1", array("order" => "name ASC")));
+        } else {
+            $groups = new \Model\User\Group;
+            $userGroups = $groups->getUserGroups($f3->get("user.id"));
+            $f3->set("groups", $userGroups);
+            $allUsers = $users->find("deleted_date IS NULL AND role != 'group'", array("order" => "name ASC"));
+            $groupUsers;
+            $groupProjects = Array();
+            foreach($userGroups as $curGroup) {
+                $curGroupProjects = $groups->getGroupProjects($curGroup['id']);
+                foreach($curGroupProjects as $project) {
+                    array_push($groupProjects, $project);
+                }
+                foreach($allUsers as $curUser) {
+                    if ($groups->userIsInGroup($curGroup['id'], $curUser['id'])) {
+                        $groupUsers[] = $curUser;
+                    }
+                }
+            }
+			$f3->set("projects", $groupProjects);
+            $f3->set("users", $groupUsers);
+        }
+    }
+
+    /**
      * Get current time and date in a MySQL NOW() format
      * @param  boolean $time  Whether to include the time in the string
      * @return string

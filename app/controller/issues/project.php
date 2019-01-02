@@ -87,6 +87,7 @@ class Project extends \Controller
         // Render view
         $f3->set("project", $project);
         $f3->set("title", $project->type_name . " #" . $project->id  . ": " . $project->name . " - " . $f3->get("dict.project_overview"));
+        $this->loadGroupsUsersProjects($f3);
         $this->_render("issues/project.html");
     }
 

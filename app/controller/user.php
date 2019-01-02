@@ -67,9 +67,14 @@ class User extends \Controller
         $localDate = date('Y-m-d', \Helper\View::instance()->utc2local());
         $sprint->load(array("? BETWEEN start_date AND end_date", $localDate));
         $f3->set("sprint", $sprint);
-
         $f3->set("dashboard", $dashboard);
         $f3->set("menuitem", "index");
+
+        // Workaround for dashboard issue related to projects nav
+        $curUser = $f3->get("user_obj");
+        if ($curUser->role != 'admin') {
+            $this->loadGroupsUsersProjects($f3);
+        }
         $this->_render("user/dashboard.html");
     }
 
@@ -133,6 +138,7 @@ class User extends \Controller
         $f3->set("menuitem", "user");
         $f3->set("languages", $this->_languages);
         $this->_loadThemes();
+        $this->loadGroupsUsersProjects($f3);
         $this->_render("user/account.html");
     }
 
@@ -339,6 +345,7 @@ class User extends \Controller
             $f3->set("overdue_issues", $issue->paginate(0, 200, array("status_closed = '0' AND deleted_date IS NULL AND owner_id = ? AND due_date IS NOT NULL AND due_date < ?",
                     $user->id, date("Y-m-d", \Helper\View::instance()->utc2local())), array("order" => "due_date ASC")));
 
+            $this->loadGroupsUsersProjects($f3);
             $this->_render("user/single.html");
         } else {
             $f3->error(404);

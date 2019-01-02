@@ -22,9 +22,9 @@ class Tag extends \Controller
         $f3->set("list", $cloud);
         shuffle($cloud);
         $f3->set("cloud", $cloud);
-
         $f3->set("title", $f3->get("dict.issue_tags"));
         $f3->set("menuitem", "tags");
+        $this->loadGroupsUsersProjects($f3);
         $this->_render("tag/index.html");
     }
 
@@ -49,6 +49,9 @@ class Tag extends \Controller
         $f3->set("title", "#" . $params["tag"] . " - " . $f3->get("dict.issue_tags"));
         $f3->set("tag", $tag);
         $f3->set("issues.subset", $issue->find("id IN ($issue_ids) AND deleted_date IS NULL"));
+
+        $this->loadGroupsUsersProjects($f3);
+
         $this->_render("tag/single.html");
     }
 }
