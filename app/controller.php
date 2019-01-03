@@ -120,7 +120,7 @@ abstract class Controller
                 }
             }
 			$f3->set("accessProjects", $groupProjects);
-            $f3->set("accessUsers", $groupUsers);
+            $f3->set("accessUsers", array_unique($groupUsers));
         }
     }
 

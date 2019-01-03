@@ -360,4 +360,12 @@ class User extends \Model
         $tokenValid = hash("sha384", $token) == $this->reset_token;
         return $timestampValid && $tokenValid;
     }
+
+    /**
+     * Returns the username as a String
+     * @return string
+     */
+    public function __toString() {
+        return $this->get("username");
+    }
 }
